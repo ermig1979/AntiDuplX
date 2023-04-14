@@ -1,0 +1,3 @@
+[submodule "3rd/Cpl"]
+	path = 3rd/Cpl
+	url = https://github.com/ermig1979/Cpl.git
