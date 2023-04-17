@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\src\AntiDuplX\AntiDuplX.cpp">
+      <Filter>AntiDuplX</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="AntiDuplX">
+      <UniqueIdentifier>{8f98705d-cc91-411b-87bd-1d6c25786ee9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cpl">
+      <UniqueIdentifier>{78227c41-a041-454e-917c-abbe81b0aa8a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Args.h">
+      <Filter>Cpl</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
