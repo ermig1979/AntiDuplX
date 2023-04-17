@@ -40,7 +40,6 @@ namespace Adx
         Cpl::Log::Level logLevel;
         String logFile;
 
-
         Options(int argc, char* argv[])
             : ArgsParser(argc, argv, true)
         {

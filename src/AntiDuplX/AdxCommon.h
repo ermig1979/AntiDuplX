@@ -26,13 +26,24 @@
 
 #include "Cpl/String.h"
 #include "Cpl/Args.h"
+#include "Cpl/Log.h"
 
 #include "Simd/SimdView.hpp"
+#include "Simd/SimdImageMatcher.hpp"
+
+#include <filesystem>
 
 namespace Adx
 {
+    typedef std::filesystem::file_time_type FileTime;
+    typedef std::filesystem::path Path;
+    typedef std::filesystem::directory_entry DirEntry;
+
     typedef Cpl::Int Int;
     typedef Cpl::String String;
     typedef Cpl::Strings Strings;
+
+    typedef Simd::ImageMatcher<size_t, Simd::Allocator> Matcher;
+    typedef Simd::View<Simd::Allocator> View;
 }
 

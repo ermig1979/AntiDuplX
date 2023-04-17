@@ -24,16 +24,39 @@
 
 #include "AntiDuplX/AdxEngine.h"
 
-int main(int argc, char* argv[])
+namespace Adx
 {
-    Adx::Options options(argc, argv);
+	Engine::Engine(const Options& options)
+		: _options(options)
+		, _imageFinder(options, _imageInfos)
+		, _imageMatcher(options, _imageInfos)
+	{
+	}
 
-    Cpl::Log::Global().AddStdWriter(options.logLevel);
-    if (!options.logFile.empty())
-        Cpl::Log::Global().AddFileWriter(options.logLevel, options.logFile);
-    Cpl::Log::Global().SetFlags(Cpl::Log::BashFlags);
+	bool Engine::Run()
+	{
+		CPL_LOG_SS(Info, "Start search of duplicates:");
 
-    Adx::Engine engine(options);
+		if (!_imageFinder.Run())
+			return false;
 
-    return engine.Run() ? 0 : 1;
+		if (!_imageMatcher.Run())
+			return false;
+
+		Print();
+
+		return true;
+	}
+
+	void Engine::Print()
+	{
+		std::cout << "Image count: " << _imageInfos.size() << std::endl;
+		for (size_t i = 0; i < _imageInfos.size(); ++i)
+		{
+			std::cout << _imageInfos[i].path << " ";
+			std::cout << _imageInfos[i].size / 1024 << " kb ";
+			std::cout << std::endl;
+		}
+	}
 }
+

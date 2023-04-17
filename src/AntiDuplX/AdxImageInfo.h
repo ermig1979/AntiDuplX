@@ -22,18 +22,30 @@
 * SOFTWARE.
 */
 
-#include "AntiDuplX/AdxEngine.h"
+#pragma once
 
-int main(int argc, char* argv[])
+#include "AntiDuplX/AdxCommon.h"
+
+namespace Adx
 {
-    Adx::Options options(argc, argv);
+    struct ImageInfo
+    {
+        String path;
+        size_t size;
+        FileTime time;
+        bool removed;
+        size_t width;
+        size_t height;
 
-    Cpl::Log::Global().AddStdWriter(options.logLevel);
-    if (!options.logFile.empty())
-        Cpl::Log::Global().AddFileWriter(options.logLevel, options.logFile);
-    Cpl::Log::Global().SetFlags(Cpl::Log::BashFlags);
+        ImageInfo()
+            : size(0)
+            , removed(false)
+            , width(0)
+            , height(0)
+        {
+        }
+    };
 
-    Adx::Engine engine(options);
-
-    return engine.Run() ? 0 : 1;
+    typedef std::vector<ImageInfo> ImageInfos;
 }
+

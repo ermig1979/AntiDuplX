@@ -26,41 +26,28 @@
 
 #include "AntiDuplX/AdxCommon.h"
 #include "AntiDuplX/AdxOptions.h"
-
-#include "Cpl/Log.h"
+#include "AntiDuplX/AdxImageInfo.h"
 
 namespace Adx
 {
-    struct ImageInfo
-    {
-        String path;
-        size_t size;
-    };
-
-    typedef std::vector<ImageInfo> ImageInfos;
-
-    //-------------------------------------------------------------------------------------------------
-
     class ImageFinder
     {
     public:
-        ImageFinder(const Options & options)
+        ImageFinder(const Options & options, ImageInfos &imageInfos)
             : _options(options)
+            , _imageInfos(imageInfos)
         {
         }
 
         bool Run();
 
-        const ImageInfos& Get() const
-        {
-            return _imageInfos;
-        }
-
     private:
         const Options & _options;
-        ImageInfos _imageInfos;
+        ImageInfos & _imageInfos;
 
-        bool Find(const String& path);
+        bool Find(const Path& path);
+        bool IsWanted(const Path& path);
+        void Push(const DirEntry &entry);
     };
 }
 

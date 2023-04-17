@@ -35,22 +35,13 @@ namespace Adx
     {
         for (size_t d = 0; d < _options.imageDirectories.size(); ++d)
         {
-            if (!Find(_options.imageDirectories[d]))
+            if (!Find(Path(_options.imageDirectories[d])))
                 return false;
         }
         return true;
     }
 
-    CPL_INLINE bool IsWanted(const fs::path & path, const Strings & extensions)
-    {
-        String ext = Cpl::ToLowerCase(path.extension().string());
-        for (size_t i = 0; i < extensions.size(); ++i)
-            if (ext == extensions[i])
-                return true;
-        return false;
-    }
-
-    bool ImageFinder::Find(const String& path)
+    bool ImageFinder::Find(const Path& path)
     {
         fs::file_status status = fs::status(path);
         if (!fs::exists(status))
@@ -64,34 +55,44 @@ namespace Adx
             return false;
         }
 
+        size_t before = _imageInfos.size();
         if (_options.subDirectories)
         {
             for (fs::recursive_directory_iterator it(path); it != fs::recursive_directory_iterator(); ++it)
             {
-                if (it->is_regular_file() && IsWanted(it->path(), _options.imageExtensions))
-                {
-                    ImageInfo imageInfo;
-                    imageInfo.path = it->path().string();
-                    imageInfo.size = it->file_size();
-                    _imageInfos.push_back(imageInfo);
-                }
+                if (it->is_regular_file() && IsWanted(it->path()))
+                    Push(*it);
             }
         }
         else
         {
             for (fs::directory_iterator it(path); it != fs::directory_iterator(); ++it)
             {
-                if (it->is_regular_file() && IsWanted(it->path(), _options.imageExtensions))
-                {
-                    ImageInfo imageInfo;
-                    imageInfo.path = it->path().string();
-                    imageInfo.size = it->file_size();
-                    _imageInfos.push_back(imageInfo);
-                }
+                if (it->is_regular_file() && IsWanted(it->path()))
+                    Push(*it);
             }
         }
+        CPL_LOG_SS(Info, _imageInfos.size() - before << " images were found in '" << path.string() << "'.");
 
         return true;
+    }
+
+    bool ImageFinder::IsWanted(const Path & path)
+    {
+        String ext = Cpl::ToLowerCase(path.extension().string());
+        for (size_t i = 0; i < _options.imageExtensions.size(); ++i)
+            if (ext == _options.imageExtensions[i])
+                return true;
+        return false;
+    }
+
+    void ImageFinder::Push(const DirEntry& entry)
+    {
+        ImageInfo imageInfo;
+        imageInfo.path = entry.path().string();
+        imageInfo.size = entry.file_size();
+        imageInfo.time = entry.last_write_time();
+        _imageInfos.push_back(imageInfo);
     }
 }
 

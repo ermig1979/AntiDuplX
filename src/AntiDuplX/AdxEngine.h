@@ -22,18 +22,29 @@
 * SOFTWARE.
 */
 
-#include "AntiDuplX/AdxEngine.h"
+#pragma once
 
-int main(int argc, char* argv[])
+#include "AntiDuplX/AdxCommon.h"
+#include "AntiDuplX/AdxOptions.h"
+#include "AntiDuplX/AdxImageFinder.h"
+#include "AntiDuplX/AdxImageMatcher.h"
+
+namespace Adx
 {
-    Adx::Options options(argc, argv);
+    class Engine
+    {
+    public:
+        Engine(const Options& options);
 
-    Cpl::Log::Global().AddStdWriter(options.logLevel);
-    if (!options.logFile.empty())
-        Cpl::Log::Global().AddFileWriter(options.logLevel, options.logFile);
-    Cpl::Log::Global().SetFlags(Cpl::Log::BashFlags);
+        bool Run();
 
-    Adx::Engine engine(options);
+    private:
+        const Options & _options;
+        ImageInfos _imageInfos;
+        ImageFinder _imageFinder;
+        ImageMatcher _imageMatcher;
 
-    return engine.Run() ? 0 : 1;
+        void Print();
+    };
 }
+

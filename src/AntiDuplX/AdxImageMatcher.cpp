@@ -22,18 +22,50 @@
 * SOFTWARE.
 */
 
-#include "AntiDuplX/AdxEngine.h"
+#include "AntiDuplX/AdxCommon.h"
+#include "AntiDuplX/AdxImageMatcher.h"
 
-int main(int argc, char* argv[])
+#include <filesystem>
+
+namespace Adx
 {
-    Adx::Options options(argc, argv);
+    namespace fs = std::filesystem;
 
-    Cpl::Log::Global().AddStdWriter(options.logLevel);
-    if (!options.logFile.empty())
-        Cpl::Log::Global().AddFileWriter(options.logLevel, options.logFile);
-    Cpl::Log::Global().SetFlags(Cpl::Log::BashFlags);
+    bool ImageMatcher::Run()
+    {
+        CPL_LOG_SS(Info, "Match images: ");
 
-    Adx::Engine engine(options);
+        SetProgress(0);
+        for (size_t i = 0; i < _imageInfos.size(); ++i)
+        {
+            if (!LoadImage(i))
+                return false;
+            SetProgress(i);
+        }
+        SetProgress(-1);
 
-    return engine.Run() ? 0 : 1;
+        return true;
+    }
+
+    void ImageMatcher::SetProgress(size_t index)
+    {
+        double progress = double(std::min(index, _imageInfos.size())) / double(_imageInfos.size());
+        std::cout << "\rMatch progress: " << std::fixed << std::setprecision(1) << progress * 100.0 << "%" << std::flush;
+        if(index == -1)
+            std::cout << std::endl;
+    }
+
+    bool ImageMatcher::LoadImage(size_t index)
+    {
+        const String & path = _imageInfos[index].path;
+        View image;
+        if (!image.Load(path, View::Gray8))
+        {
+            CPL_LOG_SS(Warning, "Can't load '" << path << "' image!");
+            return true;
+        }
+
+        return true;
+    }
 }
+
