@@ -37,7 +37,7 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\src;$(ProjectDir)\..\..\3rd\Cpl\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\src;$(ProjectDir)\..\..\3rd\Cpl\src;$(ProjectDir)\..\..\3rd\Simd\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FloatingPointModel>Fast</FloatingPointModel>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>

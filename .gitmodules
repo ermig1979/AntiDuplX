@@ -1,3 +1,7 @@
 [submodule "3rd/Cpl"]
 	path = 3rd/Cpl
 	url = https://github.com/ermig1979/Cpl.git
+[submodule "3rd/Simd"]
+	path = 3rd/Simd
+	url = https://github.com/ermig1979/Simd.git
+	branch = master

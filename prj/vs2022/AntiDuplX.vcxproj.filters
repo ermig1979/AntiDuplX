@@ -29,5 +29,50 @@
     <ClInclude Include="..\..\src\AntiDuplX\AdxImageFinder.h">
       <Filter>AntiDuplX</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Config.h">
+      <Filter>Cpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Console.h">
+      <Filter>Cpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Defs.h">
+      <Filter>Cpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\File.h">
+      <Filter>Cpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\GeometryUtils.h">
+      <Filter>Cpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Html.h">
+      <Filter>Cpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Log.h">
+      <Filter>Cpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Param.h">
+      <Filter>Cpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\ParamV2.h">
+      <Filter>Cpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Performance.h">
+      <Filter>Cpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Prop.h">
+      <Filter>Cpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\String.h">
+      <Filter>Cpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Table.h">
+      <Filter>Cpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Xml.h">
+      <Filter>Cpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Yaml.h">
+      <Filter>Cpl</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

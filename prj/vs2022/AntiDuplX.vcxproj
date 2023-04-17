@@ -24,9 +24,62 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Args.h" />
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Config.h" />
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Console.h" />
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Defs.h" />
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\File.h" />
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\GeometryUtils.h" />
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Html.h" />
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Log.h" />
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Param.h" />
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\ParamV2.h" />
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Performance.h" />
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Prop.h" />
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\String.h" />
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Table.h" />
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Xml.h" />
+    <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Yaml.h" />
     <ClInclude Include="..\..\src\AntiDuplX\AdxCommon.h" />
     <ClInclude Include="..\..\src\AntiDuplX\AdxImageFinder.h" />
     <ClInclude Include="..\..\src\AntiDuplX\AdxOptions.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\3rd\Simd\prj\vs2022\AmxBf16.vcxproj">
+      <Project>{3e68d81a-dbc0-47b4-912b-7c9efce28b6f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\3rd\Simd\prj\vs2022\Avx1.vcxproj">
+      <Project>{d6e29b9b-ee2d-4339-8417-dcadc283884f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\3rd\Simd\prj\vs2022\Avx2.vcxproj">
+      <Project>{4c82474f-3b9a-4b92-ac74-2434ca1d5064}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\3rd\Simd\prj\vs2022\Avx512bf16.vcxproj">
+      <Project>{8023d218-c0d2-48ad-ad1b-0d4e6b1de7be}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\3rd\Simd\prj\vs2022\Avx512bw.vcxproj">
+      <Project>{3e24da78-24e3-41d2-9066-54c75be13b90}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\3rd\Simd\prj\vs2022\Avx512vnni.vcxproj">
+      <Project>{e89969de-d5f1-44c5-81af-a4283851090b}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\3rd\Simd\prj\vs2022\Base.vcxproj">
+      <Project>{1622c4ef-06a4-4daa-9631-5d71b32858a2}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\3rd\Simd\prj\vs2022\Neon.vcxproj">
+      <Project>{271c2d02-b19d-4193-8d83-cc0f06e75f3d}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\3rd\Simd\prj\vs2022\Simd.vcxproj">
+      <Project>{c809d7a3-6c52-4e36-8582-00ced929317d}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\3rd\Simd\prj\vs2022\Sse41.vcxproj">
+      <Project>{50073d4b-e2ef-4fa5-9868-380c4a4dae0c}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\3rd\Simd\prj\vs2022\Vmx.vcxproj">
+      <Project>{a88b854a-fcf9-484a-bda2-e27f1ec3a0a9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\3rd\Simd\prj\vs2022\Vsx.vcxproj">
+      <Project>{e3be9fd8-d69d-4b04-b719-c475d868c5eb}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

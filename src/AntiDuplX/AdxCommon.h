@@ -25,6 +25,9 @@
 #pragma once
 
 #include "Cpl/String.h"
+#include "Cpl/Args.h"
+
+#include "Simd/SimdView.hpp"
 
 namespace Adx
 {
