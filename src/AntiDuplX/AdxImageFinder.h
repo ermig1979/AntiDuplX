@@ -22,25 +22,45 @@
 * SOFTWARE.
 */
 
+#pragma once
+
+#include "AntiDuplX/AdxCommon.h"
 #include "AntiDuplX/AdxOptions.h"
-#include "AntiDuplX/AdxImageFinder.h"
 
-int main(int argc, char* argv[])
+#include "Cpl/Log.h"
+
+namespace Adx
 {
-    Adx::Options options(argc, argv);
+    struct ImageInfo
+    {
+        String path;
+        size_t size;
+    };
 
-    Cpl::Log::Global().AddStdWriter(options.logLevel);
-    if (!options.logFile.empty())
-        Cpl::Log::Global().AddFileWriter(options.logLevel, options.logFile);
-    Cpl::Log::Global().SetFlags(Cpl::Log::BashFlags);
+    typedef std::vector<ImageInfo> ImageInfos;
 
-    Adx::ImageFinder imageFinder(options);
+    //-------------------------------------------------------------------------------------------------
 
-    imageFinder.Run();
+    class ImageFinder
+    {
+    public:
+        ImageFinder(const Options & options)
+            : _options(options)
+        {
+        }
 
-    std::cout << "Image count: " << imageFinder.Get().size() << std::endl;
-    for(size_t i = 0; i < imageFinder.Get().size(); ++i)
-        std::cout << imageFinder.Get()[i].path << std::endl;
+        bool Run();
 
-    return 0;
+        const ImageInfos& Get() const
+        {
+            return _imageInfos;
+        }
+
+    private:
+        const Options & _options;
+        ImageInfos _imageInfos;
+
+        bool Find(const String& path);
+    };
 }
+

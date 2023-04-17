@@ -4,6 +4,9 @@
     <ClCompile Include="..\..\src\AntiDuplX\AntiDuplX.cpp">
       <Filter>AntiDuplX</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\AntiDuplX\AdxImageFinder.cpp">
+      <Filter>AntiDuplX</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="AntiDuplX">
@@ -21,6 +24,9 @@
       <Filter>AntiDuplX</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\AntiDuplX\AdxCommon.h">
+      <Filter>AntiDuplX</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\AntiDuplX\AdxImageFinder.h">
       <Filter>AntiDuplX</Filter>
     </ClInclude>
   </ItemGroup>

@@ -28,6 +28,7 @@
 
 namespace Adx
 {
+    typedef Cpl::Int Int;
     typedef Cpl::String String;
     typedef Cpl::Strings Strings;
 }

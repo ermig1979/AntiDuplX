@@ -19,11 +19,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\AntiDuplX\AdxImageFinder.cpp" />
     <ClCompile Include="..\..\src\AntiDuplX\AntiDuplX.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Args.h" />
     <ClInclude Include="..\..\src\AntiDuplX\AdxCommon.h" />
+    <ClInclude Include="..\..\src\AntiDuplX\AdxImageFinder.h" />
     <ClInclude Include="..\..\src\AntiDuplX\AdxOptions.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

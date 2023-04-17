@@ -27,6 +27,7 @@
 #include "AntiDuplX/AdxCommon.h"
 
 #include "Cpl/Args.h"
+#include "Cpl/Log.h"
 
 namespace Adx
 {
@@ -35,13 +36,20 @@ namespace Adx
         String mode;
         Strings imageDirectories;
         Strings imageExtensions;
+        bool subDirectories;
+        Cpl::Log::Level logLevel;
+        String logFile;
+
 
         Options(int argc, char* argv[])
             : ArgsParser(argc, argv, true)
         {
-            mode = GetArg("-m");
-            imageDirectories = GetArgs("-id");
-            imageExtensions = GetArgs("-ie");
+            mode = GetArg("-m", "test");
+            imageDirectories = GetArgs("-id", Strings({ "." }));
+            imageExtensions = GetArgs("-ie", Strings( { ".jpg", ".png"}));
+            subDirectories = Cpl::ToVal<bool>(GetArg("-sd", "1"));
+            logLevel = (Cpl::Log::Level)Cpl::ToVal<Int>(GetArg2("-ll", "--logLevel", "4", false));
+            logFile = GetArg2("-lf", "--logFile", "", false);
         }
 
         ~Options()
