@@ -22,9 +22,31 @@
 * SOFTWARE.
 */
 
-#include "AntiDuplX/AdxOptions.h"
+#pragma once
 
-int main(int argc, char* argv[])
+#include "AntiDuplX/AdxCommon.h"
+
+#include "Cpl/Args.h"
+
+namespace Adx
 {
-    return 0;
+    struct Options : public Cpl::ArgsParser
+    {
+        String mode;
+        Strings imageDirectories;
+        Strings imageExtensions;
+
+        Options(int argc, char* argv[])
+            : ArgsParser(argc, argv, true)
+        {
+            mode = GetArg("-m");
+            imageDirectories = GetArgs("-id");
+            imageExtensions = GetArgs("-ie");
+        }
+
+        ~Options()
+        {
+        }
+    };
 }
+

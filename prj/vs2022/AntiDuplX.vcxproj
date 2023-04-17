@@ -23,6 +23,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Args.h" />
+    <ClInclude Include="..\..\src\AntiDuplX\AdxCommon.h" />
+    <ClInclude Include="..\..\src\AntiDuplX\AdxOptions.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

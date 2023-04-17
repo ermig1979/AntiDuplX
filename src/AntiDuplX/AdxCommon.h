@@ -22,9 +22,13 @@
 * SOFTWARE.
 */
 
-#include "AntiDuplX/AdxOptions.h"
+#pragma once
 
-int main(int argc, char* argv[])
+#include "Cpl/String.h"
+
+namespace Adx
 {
-    return 0;
+    typedef Cpl::String String;
+    typedef Cpl::Strings Strings;
 }
+

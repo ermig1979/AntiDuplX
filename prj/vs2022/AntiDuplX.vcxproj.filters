@@ -17,5 +17,11 @@
     <ClInclude Include="..\..\3rd\Cpl\src\Cpl\Args.h">
       <Filter>Cpl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\AntiDuplX\AdxOptions.h">
+      <Filter>AntiDuplX</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\AntiDuplX\AdxCommon.h">
+      <Filter>AntiDuplX</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
