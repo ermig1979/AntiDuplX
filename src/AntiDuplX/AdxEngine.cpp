@@ -53,8 +53,12 @@ namespace Adx
 		std::cout << "Image count: " << _imageInfos.size() << std::endl;
 		for (size_t i = 0; i < _imageInfos.size(); ++i)
 		{
-			std::cout << _imageInfos[i].path << " ";
-			std::cout << _imageInfos[i].size / 1024 << " kb ";
+			const ImageInfo& info = _imageInfos[i];
+			std::cout << info.path << " ";
+			std::cout << info.size / 1024 << " kb ";
+			std::cout << "[" << info.width << "x" << info.height << "] ";
+			//std::cout << ToStr(info.format)<< " ";
+			std::cout << (info.remove ? "~~~ REMOVE ~~~" : "" );
 			std::cout << std::endl;
 		}
 	}

@@ -39,6 +39,7 @@ namespace Adx
         bool subDirectories;
         Cpl::Log::Level logLevel;
         String logFile;
+        double threshold;
 
         Options(int argc, char* argv[])
             : ArgsParser(argc, argv, true)
@@ -49,6 +50,7 @@ namespace Adx
             subDirectories = Cpl::ToVal<bool>(GetArg("-sd", "1"));
             logLevel = (Cpl::Log::Level)Cpl::ToVal<Int>(GetArg2("-ll", "--logLevel", "4", false));
             logFile = GetArg2("-lf", "--logFile", "", false);
+            threshold = Cpl::ToVal<double>(GetArg2("-t", "--threshold", "0.05", false));
         }
 
         ~Options()

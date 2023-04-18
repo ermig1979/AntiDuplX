@@ -33,13 +33,14 @@ namespace Adx
         String path;
         size_t size;
         FileTime time;
-        bool removed;
+        bool remove;
         size_t width;
         size_t height;
+        SimdImageFileType format;
 
         ImageInfo()
             : size(0)
-            , removed(false)
+            , remove(false)
             , width(0)
             , height(0)
         {
@@ -47,5 +48,21 @@ namespace Adx
     };
 
     typedef std::vector<ImageInfo> ImageInfos;
+
+    CPL_INLINE String ToStr(SimdImageFileType format)
+    {
+        switch (format)
+        {
+        case SimdImageFileUndefined: return "NONE";
+        case SimdImageFilePgmTxt: return "PGM";
+        case SimdImageFilePgmBin: return "PGM";
+        case SimdImageFilePpmTxt: return "PPM";
+        case SimdImageFilePpmBin: return "PPM";
+        case SimdImageFilePng: return "PNG";
+        case SimdImageFileJpeg: return "JPEG";
+        default:
+            return "";
+        }
+    }
 }
 

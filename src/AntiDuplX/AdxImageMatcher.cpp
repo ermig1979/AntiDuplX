@@ -35,6 +35,8 @@ namespace Adx
     {
         CPL_LOG_SS(Info, "Match images: ");
 
+        _matcher.Init(_options.threshold, Matcher::Hash16x16, _imageInfos.size(), true);
+
         SetProgress(0);
         for (size_t i = 0; i < _imageInfos.size(); ++i)
         {
@@ -57,15 +59,65 @@ namespace Adx
 
     bool ImageMatcher::LoadImage(size_t index)
     {
-        const String & path = _imageInfos[index].path;
+        ImageInfo & info = _imageInfos[index];
+        const String & path = info.path;
         View image;
         if (!image.Load(path, View::Gray8))
         {
             CPL_LOG_SS(Warning, "Can't load '" << path << "' image!");
-            return true;
+            return false;
         }
+        info.width = image.width;
+        info.height = image.height;
+
+        Matcher::HashPtr hash = _matcher.Create(image, index);
+
+        Matcher::Results results;
+        if (_matcher.Find(hash, results))
+        {
+            size_t best = 0;
+            for (size_t i = 1; i < results.size(); ++i)
+            {
+                if (results[i].difference < results[best].difference)
+                    best = i;
+            }
+            int compare = Compare(info, _imageInfos[results[best].hash->tag]);
+            if (compare <= 0)
+            {
+                info.remove = true;
+                return true;
+            }
+            else
+            {
+                _matcher.Skip(results[best].hash);
+                _imageInfos[results[best].hash->tag].remove = true;
+            }
+        }
+        _matcher.Add(hash);
 
         return true;
+    }
+
+    int ImageMatcher::Compare(const ImageInfo& a, const ImageInfo& b) const
+    {
+        size_t aArea = a.width * a.height;
+        size_t bArea = b.width * b.height;
+        if (aArea > bArea)
+            return 1;
+        if (aArea < bArea)
+            return -1;
+        if (a.format == b.format)
+        {
+            if (a.size > b.size)
+                return 1;
+            if (a.size < b.size)
+                return -1;
+        }
+        else if (a.format == SimdImageFilePng)
+            return 1;
+        else if (b.format == SimdImageFilePng)
+            return -1;
+        return 0;
     }
 }
 

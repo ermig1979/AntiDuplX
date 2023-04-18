@@ -44,9 +44,11 @@ namespace Adx
     private:
         const Options & _options;
         ImageInfos & _imageInfos;
+        Matcher _matcher;
 
         void SetProgress(size_t index);
         bool LoadImage(size_t index);
+        int Compare(const ImageInfo& a, const ImageInfo& b) const;
     };
 }
 

@@ -88,11 +88,18 @@ namespace Adx
 
     void ImageFinder::Push(const DirEntry& entry)
     {
-        ImageInfo imageInfo;
-        imageInfo.path = entry.path().string();
-        imageInfo.size = entry.file_size();
-        imageInfo.time = entry.last_write_time();
-        _imageInfos.push_back(imageInfo);
+        ImageInfo info;
+        info.path = entry.path().string();
+        info.size = entry.file_size();
+        info.time = entry.last_write_time();
+        String ext = Cpl::ToLowerCase(entry.path().extension().string());
+        if (ext == ".png")
+            info.format = SimdImageFilePng;
+        else if (ext == ".jpg")
+            info.format = SimdImageFileJpeg;
+        else
+            info.format = SimdImageFileUndefined;
+        _imageInfos.push_back(info);
     }
 }
 
