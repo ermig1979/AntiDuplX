@@ -25,33 +25,20 @@
 #pragma once
 
 #include "AntiDuplX/AdxCommon.h"
-#include "AntiDuplX/AdxOptions.h"
-#include "AntiDuplX/AdxImageInfo.h"
-#include "AntiDuplX/AdxTurboJpegDecoder.h"
 
 namespace Adx
 {
-    class ImageLoader
-    {
-    public:
-        ImageLoader(const Options& options, ImageInfos& imageInfos);
+	class TurboJpegDecoder
+	{
+		void * _decoder;
+	public:
+		TurboJpegDecoder();
+		
+		~TurboJpegDecoder();
 
-        bool Run();
+		bool Enable() const { return _decoder != NULL; }
 
-    private:
-        const Options & _options;
-        ImageInfos & _imageInfos;
-        TurboJpegDecoder _turboJpegDecoder;
-        Matcher _matcher;
-        Buffer8u _buffer;
-        View _image;
-        double _progress;
-
-        void SetProgress(size_t index);
-        bool LoadImage(size_t index);
-        bool LoadFile(size_t index);   
-        bool DecodeImage(size_t index);
-        bool CreateHash(size_t index);
-    };
+		bool Decode(const Buffer8u& buffer, View& view);
+	};
 }
 

@@ -5,3 +5,6 @@
 	path = 3rd/Simd
 	url = https://github.com/ermig1979/Simd.git
 	branch = master
+[submodule "3rd/libjpeg-turbo"]
+	path = 3rd/libjpeg-turbo
+	url = https://github.com/libjpeg-turbo/libjpeg-turbo.git

@@ -22,36 +22,58 @@
 * SOFTWARE.
 */
 
-#pragma once
-
-#include "AntiDuplX/AdxCommon.h"
-#include "AntiDuplX/AdxOptions.h"
-#include "AntiDuplX/AdxImageInfo.h"
 #include "AntiDuplX/AdxTurboJpegDecoder.h"
+
+#ifdef __linux__
+#include <turbojpeg.h>
 
 namespace Adx
 {
-    class ImageLoader
+    TurboJpegDecoder::TurboJpegDecoder()
+        : _decoder(0)
     {
-    public:
-        ImageLoader(const Options& options, ImageInfos& imageInfos);
+        _decoder = tjInitDecompress();
+    }
 
-        bool Run();
+    TurboJpegDecoder::~TurboJpegDecoder()
+    {
+        if (_decoder)
+        {
+            int error = tjDestroy(_decoder);
+            _decoder = NULL;
+        }
+    }
 
-    private:
-        const Options & _options;
-        ImageInfos & _imageInfos;
-        TurboJpegDecoder _turboJpegDecoder;
-        Matcher _matcher;
-        Buffer8u _buffer;
-        View _image;
-        double _progress;
-
-        void SetProgress(size_t index);
-        bool LoadImage(size_t index);
-        bool LoadFile(size_t index);   
-        bool DecodeImage(size_t index);
-        bool CreateHash(size_t index);
-    };
+    bool TurboJpegDecoder::Decode(const Buffer8u& buffer, View& view)
+    {
+        int width, height, subSample, colorSpace;
+        int error = tjDecompressHeader3(_decoder, buffer.data(), buffer.size(), &width, &height, &subSample, &colorSpace);
+        if (error)
+            return false;
+        view.Recreate(width, height, View::Gray8);
+        error = tjDecompress2(_decoder, buffer.data(), buffer.size(), view.data, view.width, view.stride, view.height, TJPF_GRAY, TJFLAG_FASTDCT);
+        if (error)
+            return false;
+        return true;
+    }
 }
+
+#else
+namespace Adx
+{
+    TurboJpegDecoder::TurboJpegDecoder()
+        : _decoder(0)
+    {
+    }
+
+    TurboJpegDecoder::~TurboJpegDecoder()
+    {
+    }
+
+    bool TurboJpegDecoder::Decode(const Buffer8u& buffer, View& view)
+    {
+        return false;
+    }
+}
+#endif
 

@@ -97,7 +97,11 @@ namespace Adx
     {
         CPL_PERF_FUNC();
 
-        return _image.Load(_buffer.data(), _buffer.size());
+        const ImageInfo& info = _imageInfos[index];
+        if (_turboJpegDecoder.Enable() && info.format == SimdImageFileJpeg)
+            return _turboJpegDecoder.Decode(_buffer, _image);
+        else
+            return _image.Load(_buffer.data(), _buffer.size());
     }
 
     bool ImageLoader::CreateHash(size_t index)
