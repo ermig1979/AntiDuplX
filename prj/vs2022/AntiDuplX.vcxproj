@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\AntiDuplX\AdxEngine.cpp" />
     <ClCompile Include="..\..\src\AntiDuplX\AdxImageFinder.cpp" />
+    <ClCompile Include="..\..\src\AntiDuplX\AdxImageLoader.cpp" />
     <ClCompile Include="..\..\src\AntiDuplX\AdxImageMatcher.cpp" />
     <ClCompile Include="..\..\src\AntiDuplX\AntiDuplX.cpp" />
   </ItemGroup>
@@ -45,6 +46,7 @@
     <ClInclude Include="..\..\src\AntiDuplX\AdxEngine.h" />
     <ClInclude Include="..\..\src\AntiDuplX\AdxImageFinder.h" />
     <ClInclude Include="..\..\src\AntiDuplX\AdxImageInfo.h" />
+    <ClInclude Include="..\..\src\AntiDuplX\AdxImageLoader.h" />
     <ClInclude Include="..\..\src\AntiDuplX\AdxImageMatcher.h" />
     <ClInclude Include="..\..\src\AntiDuplX\AdxOptions.h" />
   </ItemGroup>

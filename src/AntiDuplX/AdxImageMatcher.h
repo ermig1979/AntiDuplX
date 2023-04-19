@@ -41,11 +41,10 @@ namespace Adx
         const Options & _options;
         ImageInfos & _imageInfos;
         Matcher _matcher;
-        Cpl::PerformanceMeasurer* _pmLoad, *_pmMatch;
         double _progress;
 
         void SetProgress(size_t index);
-        bool LoadImage(size_t index);
+        bool MatchImage(size_t index);
         int Compare(const ImageInfo& a, const ImageInfo& b) const;
     };
 }

@@ -27,6 +27,7 @@
 #include "AntiDuplX/AdxCommon.h"
 #include "AntiDuplX/AdxOptions.h"
 #include "AntiDuplX/AdxImageFinder.h"
+#include "AntiDuplX/AdxImageLoader.h"
 #include "AntiDuplX/AdxImageMatcher.h"
 
 namespace Adx
@@ -42,6 +43,7 @@ namespace Adx
         const Options & _options;
         ImageInfos _imageInfos;
         ImageFinder _imageFinder;
+        ImageLoader _imageLoader;
         ImageMatcher _imageMatcher;
 
         void Print();

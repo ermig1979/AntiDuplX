@@ -22,34 +22,30 @@
 * SOFTWARE.
 */
 
-#include "AntiDuplX/AdxCommon.h"
-#include "AntiDuplX/AdxImageMatcher.h"
-
-#include <filesystem>
+#include "AntiDuplX/AdxImageLoader.h"
 
 namespace Adx
 {
-    namespace fs = std::filesystem;
 
-    ImageMatcher::ImageMatcher(const Options& options, ImageInfos& imageInfos)
+    ImageLoader::ImageLoader(const Options& options, ImageInfos& imageInfos)
         : _options(options)
         , _imageInfos(imageInfos)
         , _progress(-1.0)
     {
     }
 
-    bool ImageMatcher::Run()
+    bool ImageLoader::Run()
     {
         CPL_PERF_FUNC();
 
-        CPL_LOG_SS(Info, "Match images: ");
+        CPL_LOG_SS(Info, "Load images: ");
 
         _matcher.Init(_options.threshold, Matcher::Hash16x16, _imageInfos.size(), true);
 
         SetProgress(0);
         for (size_t i = 0; i < _imageInfos.size(); ++i)
         {
-            if (!MatchImage(i))
+            if (!LoadImage(i))
                 return false;
             SetProgress(i);
         }
@@ -58,68 +54,62 @@ namespace Adx
         return true;
     }
 
-    void ImageMatcher::SetProgress(size_t index)
+    void ImageLoader::SetProgress(size_t index)
     {
         double progress = double(std::min(index, _imageInfos.size())) / double(_imageInfos.size());
         if (progress >= _progress + 0.001 || progress == 1.0)
         {
             _progress = progress;
-            std::cout << "\rMatch progress: " << std::fixed << std::setprecision(1) << _progress * 100.0 << "%" << std::flush;
+            std::cout << "\rLoad progress: " << std::fixed << std::setprecision(1) << _progress * 100.0 << "%" << std::flush;
             if (index == -1)
                 std::cout << std::endl;
         }
     }
 
-    bool ImageMatcher::MatchImage(size_t index)
+    bool ImageLoader::LoadImage(size_t index)
     {
-        ImageInfo & info = _imageInfos[index];
-        if (!info.hash)
-            return true;
-        Matcher::Results results;
-        if (_matcher.Find(info.hash, results))
+        CPL_PERF_FUNC();
+
+        if (!LoadFile(index))
+            return false;
+
+        if (!DecodeImage(index))
         {
-            size_t best = 0;
-            for (size_t i = 1; i < results.size(); ++i)
-            {
-                if (results[i].difference < results[best].difference)
-                    best = i;
-            }
-            int compare = Compare(info, _imageInfos[results[best].hash->tag]);
-            if (compare <= 0)
-            {
-                info.remove = true;
-                return true;
-            }
-            else
-            {
-                _matcher.Skip(results[best].hash);
-                _imageInfos[results[best].hash->tag].remove = true;
-            }
+            //CPL_LOG_SS(Warning, "Can't load '" << path << "' image!");
+            return true;
         }
-        _matcher.Add(info.hash);
+
+        if (!CreateHash(index))
+            return false;
+
         return true;
     }
 
-    int ImageMatcher::Compare(const ImageInfo& a, const ImageInfo& b) const
+    bool ImageLoader::LoadFile(size_t index)
     {
-        size_t aArea = a.width * a.height;
-        size_t bArea = b.width * b.height;
-        if (aArea > bArea)
-            return 1;
-        if (aArea < bArea)
-            return -1;
-        if (a.format == b.format)
-        {
-            if (a.size > b.size)
-                return 1;
-            if (a.size < b.size)
-                return -1;
-        }
-        else if (a.format == SimdImageFilePng)
-            return 1;
-        else if (b.format == SimdImageFilePng)
-            return -1;
-        return 0;
+        CPL_PERF_FUNC();
+
+        const ImageInfo& info = _imageInfos[index];
+        return Cpl::LoadBinaryData(info.path, _buffer);
+    }
+
+    bool ImageLoader::DecodeImage(size_t index)
+    {
+        CPL_PERF_FUNC();
+
+        return _image.Load(_buffer.data(), _buffer.size());
+    }
+
+    bool ImageLoader::CreateHash(size_t index)
+    {
+        CPL_PERF_FUNC();
+
+        ImageInfo& info = _imageInfos[index];
+        info.width = _image.width;
+        info.height = _image.height;
+        info.hash = _matcher.Create(_image, index);
+
+        return true;
     }
 }
 

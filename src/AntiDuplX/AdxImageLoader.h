@@ -22,57 +22,34 @@
 * SOFTWARE.
 */
 
-#include "AntiDuplX/AdxEngine.h"
+#pragma once
+
+#include "AntiDuplX/AdxCommon.h"
+#include "AntiDuplX/AdxOptions.h"
+#include "AntiDuplX/AdxImageInfo.h"
 
 namespace Adx
 {
-	Engine::Engine(const Options& options)
-		: _options(options)
-		, _imageFinder(options, _imageInfos)
-		, _imageLoader(options, _imageInfos)
-		, _imageMatcher(options, _imageInfos)
-	{
-	}
+    class ImageLoader
+    {
+    public:
+        ImageLoader(const Options& options, ImageInfos& imageInfos);
 
-	bool Engine::Run()
-	{
-		CPL_LOG_SS(Info, "Start search of duplicates:");
+        bool Run();
 
-		if (!_imageFinder.Run())
-			return false;
+    private:
+        const Options & _options;
+        ImageInfos & _imageInfos;
+        Matcher _matcher;
+        Buffer8u _buffer;
+        View _image;
+        double _progress;
 
-		if (!_imageLoader.Run())
-			return false;
-
-		if (!_imageMatcher.Run())
-			return false;
-
-		Print();
-
-		return true;
-	}
-
-	void Engine::Print()
-	{
-		std::cout << "Images were found: " << _imageInfos.size() << std::endl;
-		size_t removed = 0;
-		for (size_t i = 0; i < _imageInfos.size(); ++i)
-			if (_imageInfos[i].remove)
-				removed++;
-		std::cout << "Images were removed: " << removed << std::endl;
-#if 0
-		for (size_t i = 0; i < _imageInfos.size(); ++i)
-		{
-			const ImageInfo& info = _imageInfos[i];
-			if (!info.remove)
-				continue;
-			std::cout << info.path << " ";
-			std::cout << info.size / 1024 << " kb ";
-			std::cout << "[" << info.width << "x" << info.height << "] ";
-			std::cout << (info.remove ? "~~~ REMOVE ~~~" : "" );
-			std::cout << std::endl;
-		}
-#endif
-	}
+        void SetProgress(size_t index);
+        bool LoadImage(size_t index);
+        bool LoadFile(size_t index);   
+        bool DecodeImage(size_t index);
+        bool CreateHash(size_t index);
+    };
 }
 

@@ -28,11 +28,16 @@
 #include "Cpl/Args.h"
 #include "Cpl/Log.h"
 #include "Cpl/Performance.h"
+#include "Cpl/File.h"
 
 #include "Simd/SimdView.hpp"
 #include "Simd/SimdImageMatcher.hpp"
 
 #include <filesystem>
+
+#ifdef LoadImage
+#undef LoadImage
+#endif
 
 namespace Adx
 {
@@ -46,5 +51,6 @@ namespace Adx
 
     typedef Simd::ImageMatcher<size_t, Simd::Allocator> Matcher;
     typedef Simd::View<Simd::Allocator> View;
+    typedef std::vector<uint8_t> Buffer8u;
 }
 

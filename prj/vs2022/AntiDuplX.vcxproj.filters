@@ -13,6 +13,9 @@
     <ClCompile Include="..\..\src\AntiDuplX\AdxImageMatcher.cpp">
       <Filter>AntiDuplX</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\AntiDuplX\AdxImageLoader.cpp">
+      <Filter>AntiDuplX</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="AntiDuplX">
@@ -87,6 +90,9 @@
       <Filter>AntiDuplX</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\AntiDuplX\AdxImageMatcher.h">
+      <Filter>AntiDuplX</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\AntiDuplX\AdxImageLoader.h">
       <Filter>AntiDuplX</Filter>
     </ClInclude>
   </ItemGroup>

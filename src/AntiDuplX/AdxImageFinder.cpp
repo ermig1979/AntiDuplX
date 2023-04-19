@@ -33,6 +33,8 @@ namespace Adx
 
     bool ImageFinder::Run()
     {
+        CPL_PERF_FUNC();
+
         for (size_t d = 0; d < _options.imageDirectories.size(); ++d)
         {
             if (!Find(Path(_options.imageDirectories[d])))

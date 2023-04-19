@@ -37,6 +37,7 @@ namespace Adx
         size_t width;
         size_t height;
         SimdImageFileType format;
+        Matcher::HashPtr hash;
 
         ImageInfo()
             : size(0)
