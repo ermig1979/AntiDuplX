@@ -31,8 +31,19 @@ namespace Adx
 {
     namespace fs = std::filesystem;
 
+    ImageMatcher::ImageMatcher(const Options& options, ImageInfos& imageInfos)
+        : _options(options)
+        , _imageInfos(imageInfos)
+        , _progress(-1.0)
+    {
+        _pmLoad = Cpl::PerformanceStorage::Global().Get("Image Load");
+        _pmMatch = Cpl::PerformanceStorage::Global().Get("Image Match");
+    }
+
     bool ImageMatcher::Run()
     {
+        CPL_PERF_FUNC();
+
         CPL_LOG_SS(Info, "Match images: ");
 
         _matcher.Init(_options.threshold, Matcher::Hash16x16, _imageInfos.size(), true);
@@ -52,9 +63,13 @@ namespace Adx
     void ImageMatcher::SetProgress(size_t index)
     {
         double progress = double(std::min(index, _imageInfos.size())) / double(_imageInfos.size());
-        std::cout << "\rMatch progress: " << std::fixed << std::setprecision(1) << progress * 100.0 << "%" << std::flush;
-        if(index == -1)
-            std::cout << std::endl;
+        if (progress >= _progress + 0.001 || progress == 1.0)
+        {
+            _progress = progress;
+            std::cout << "\rMatch progress: " << std::fixed << std::setprecision(1) << _progress * 100.0 << "%" << std::flush;
+            if (index == -1)
+                std::cout << std::endl;
+        }
     }
 
     bool ImageMatcher::LoadImage(size_t index)
@@ -62,16 +77,19 @@ namespace Adx
         ImageInfo & info = _imageInfos[index];
         const String & path = info.path;
         View image;
-        if (!image.Load(path, View::Gray8))
         {
-            CPL_LOG_SS(Warning, "Can't load '" << path << "' image!");
-            return false;
+            Cpl::PerformanceHolder pmhLoad(_pmLoad);
+            if (!image.Load(path, View::Gray8))
+            {
+                //CPL_LOG_SS(Warning, "Can't load '" << path << "' image!");
+                return true;
+            }
         }
         info.width = image.width;
         info.height = image.height;
 
+        Cpl::PerformanceHolder pmhMatch(_pmMatch);
         Matcher::HashPtr hash = _matcher.Create(image, index);
-
         Matcher::Results results;
         if (_matcher.Find(hash, results))
         {

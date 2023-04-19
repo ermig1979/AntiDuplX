@@ -43,6 +43,7 @@ namespace Adx
             , remove(false)
             , width(0)
             , height(0)
+            , format(SimdImageFileUndefined)
         {
         }
     };

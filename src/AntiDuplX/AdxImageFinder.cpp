@@ -43,6 +43,8 @@ namespace Adx
 
     bool ImageFinder::Find(const Path& path)
     {
+        CPL_PERF_FUNC();
+
         fs::file_status status = fs::status(path);
         if (!fs::exists(status))
         {

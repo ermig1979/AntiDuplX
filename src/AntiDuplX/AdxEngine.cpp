@@ -50,10 +50,18 @@ namespace Adx
 
 	void Engine::Print()
 	{
-		std::cout << "Image count: " << _imageInfos.size() << std::endl;
+		std::cout << "Images were found: " << _imageInfos.size() << std::endl;
+		size_t removed = 0;
+		for (size_t i = 0; i < _imageInfos.size(); ++i)
+			if (_imageInfos[i].remove)
+				removed++;
+		std::cout << "Images were removed: " << removed << std::endl;
+		return;
 		for (size_t i = 0; i < _imageInfos.size(); ++i)
 		{
 			const ImageInfo& info = _imageInfos[i];
+			if (!info.remove)
+				continue;
 			std::cout << info.path << " ";
 			std::cout << info.size / 1024 << " kb ";
 			std::cout << "[" << info.width << "x" << info.height << "] ";

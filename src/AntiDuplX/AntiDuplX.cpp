@@ -35,5 +35,9 @@ int main(int argc, char* argv[])
 
     Adx::Engine engine(options);
 
-    return engine.Run() ? 0 : 1;
+    int result = engine.Run() ? 0 : 1;
+
+    CPL_LOG_SS(Info, std::endl << Cpl::PerformanceStorage::Global().Report());
+
+    return result;
 }

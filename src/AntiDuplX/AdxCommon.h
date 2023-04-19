@@ -27,6 +27,7 @@
 #include "Cpl/String.h"
 #include "Cpl/Args.h"
 #include "Cpl/Log.h"
+#include "Cpl/Performance.h"
 
 #include "Simd/SimdView.hpp"
 #include "Simd/SimdImageMatcher.hpp"

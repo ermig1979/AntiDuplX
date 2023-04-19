@@ -33,11 +33,7 @@ namespace Adx
     class ImageMatcher
     {
     public:
-        ImageMatcher(const Options & options, ImageInfos &imageInfos)
-            : _options(options)
-            , _imageInfos(imageInfos)
-        {
-        }
+        ImageMatcher(const Options& options, ImageInfos& imageInfos);
 
         bool Run();
 
@@ -45,6 +41,8 @@ namespace Adx
         const Options & _options;
         ImageInfos & _imageInfos;
         Matcher _matcher;
+        Cpl::PerformanceMeasurer* _pmLoad, *_pmMatch;
+        double _progress;
 
         void SetProgress(size_t index);
         bool LoadImage(size_t index);
