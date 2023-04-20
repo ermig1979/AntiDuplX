@@ -50,7 +50,11 @@ namespace Adx
     typedef Cpl::Strings Strings;
 
     typedef Simd::ImageMatcher<size_t, Simd::Allocator> Matcher;
+    typedef std::vector<Matcher> Matchers;
     typedef Simd::View<Simd::Allocator> View;
-    typedef std::vector<uint8_t> Buffer8u;
+    typedef std::vector<View> Views;
+    typedef std::vector<uint8_t> Buffer;
+    typedef std::vector<Buffer> Buffers;
+    typedef std::vector<size_t> Indexes;
 }
 

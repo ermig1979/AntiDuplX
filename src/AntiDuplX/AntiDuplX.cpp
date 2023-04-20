@@ -37,7 +37,10 @@ int main(int argc, char* argv[])
 
     int result = engine.Run() ? 0 : 1;
 
-    CPL_LOG_SS(Info, std::endl << Cpl::PerformanceStorage::Global().Report());
+    if (options.performanceReport)
+    {
+        CPL_LOG_SS(Info, std::endl << Cpl::PerformanceStorage::Global().Report());
+    }
 
     return result;
 }

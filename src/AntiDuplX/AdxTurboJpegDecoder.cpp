@@ -44,7 +44,7 @@ namespace Adx
         }
     }
 
-    bool TurboJpegDecoder::Decode(const Buffer8u& buffer, View& view)
+    bool TurboJpegDecoder::Decode(const Buffer& buffer, View& view)
     {
         int width, height, subSample, colorSpace;
         int error = tjDecompressHeader3(_decoder, buffer.data(), buffer.size(), &width, &height, &subSample, &colorSpace);
@@ -70,7 +70,7 @@ namespace Adx
     {
     }
 
-    bool TurboJpegDecoder::Decode(const Buffer8u& buffer, View& view)
+    bool TurboJpegDecoder::Decode(const Buffer& buffer, View& view)
     {
         return false;
     }

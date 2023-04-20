@@ -38,7 +38,9 @@ namespace Adx
 
 		bool Enable() const { return _decoder != NULL; }
 
-		bool Decode(const Buffer8u& buffer, View& view);
+		bool Decode(const Buffer& buffer, View& view);
 	};
+
+	typedef std::vector<TurboJpegDecoder> TurboJpegDecoders;
 }
 

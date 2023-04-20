@@ -43,7 +43,7 @@ namespace Adx
         ImageInfos & _imageInfos;
         TurboJpegDecoder _turboJpegDecoder;
         Matcher _matcher;
-        Buffer8u _buffer;
+        Buffer _buffer;
         View _image;
         double _progress;
 

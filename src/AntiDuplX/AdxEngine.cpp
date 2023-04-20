@@ -36,7 +36,7 @@ namespace Adx
 
 	bool Engine::Run()
 	{
-		CPL_LOG_SS(Info, "Start search of duplicates:");
+		CPL_PERF_FUNC();
 
 		if (!_imageFinder.Run())
 			return false;
@@ -54,12 +54,11 @@ namespace Adx
 
 	void Engine::Print()
 	{
-		std::cout << "Images were found: " << _imageInfos.size() << std::endl;
-		size_t removed = 0;
+		size_t remove = 0;
 		for (size_t i = 0; i < _imageInfos.size(); ++i)
 			if (_imageInfos[i].remove)
-				removed++;
-		std::cout << "Images were removed: " << removed << std::endl;
+				remove++;
+		CPL_LOG_SS(Info, remove << " duplicates were found from " << _imageInfos.size() << " images.");
 #if 0
 		for (size_t i = 0; i < _imageInfos.size(); ++i)
 		{

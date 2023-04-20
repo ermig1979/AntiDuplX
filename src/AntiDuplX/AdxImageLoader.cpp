@@ -40,7 +40,7 @@ namespace Adx
 
         CPL_LOG_SS(Info, "Load images: ");
 
-        _matcher.Init(_options.threshold, Matcher::Hash16x16, _imageInfos.size(), true);
+        _matcher.Init(_options.compareThreshold, Matcher::Hash16x16, _imageInfos.size(), true);
 
         SetProgress(0);
         for (size_t i = 0; i < _imageInfos.size(); ++i)
@@ -75,7 +75,7 @@ namespace Adx
 
         if (!DecodeImage(index))
         {
-            //CPL_LOG_SS(Warning, "Can't load '" << path << "' image!");
+            CPL_LOG_SS(Verbose, "Can't decode '" << _imageInfos[index].path << "' image!");
             return true;
         }
 

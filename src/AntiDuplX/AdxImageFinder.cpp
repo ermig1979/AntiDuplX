@@ -35,6 +35,8 @@ namespace Adx
     {
         CPL_PERF_FUNC();
 
+        CPL_LOG_SS(Info, "Search images:");
+
         for (size_t d = 0; d < _options.imageDirectories.size(); ++d)
         {
             if (!Find(Path(_options.imageDirectories[d])))

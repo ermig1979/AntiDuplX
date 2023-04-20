@@ -33,24 +33,30 @@ namespace Adx
 {
     struct Options : public Cpl::ArgsParser
     {
-        String mode;
         Strings imageDirectories;
         Strings imageExtensions;
         bool subDirectories;
         Cpl::Log::Level logLevel;
         String logFile;
-        double threshold;
+        double compareThreshold;
+        size_t loadThreads;
+        size_t matchThreads;
+        String duplStrategy;
+        bool performanceReport;
 
         Options(int argc, char* argv[])
             : ArgsParser(argc, argv, true)
         {
-            mode = GetArg("-m", "test");
             imageDirectories = GetArgs("-id", Strings({ "." }));
             imageExtensions = GetArgs("-ie", Strings( { ".jpg", ".png"}));
             subDirectories = Cpl::ToVal<bool>(GetArg("-sd", "1"));
-            logLevel = (Cpl::Log::Level)Cpl::ToVal<Int>(GetArg2("-ll", "--logLevel", "4", false));
+            logLevel = (Cpl::Log::Level)Cpl::ToVal<Int>(GetArg2("-ll", "--logLevel", "3", false));
             logFile = GetArg2("-lf", "--logFile", "", false);
-            threshold = Cpl::ToVal<double>(GetArg2("-t", "--threshold", "0.05", false));
+            compareThreshold = Cpl::ToVal<double>(GetArg2("-ct", "--compareThreshold", "0.05", false));
+            loadThreads = std::min<size_t>(std::max<size_t>(Cpl::ToVal<size_t>(GetArg2("-lt", "--loadThreads", "1", false)), 1), std::thread::hardware_concurrency());
+            matchThreads = std::min<size_t>(std::max<size_t>(Cpl::ToVal<size_t>(GetArg2("-mt", "--matchThreads", "1", false)), 1), std::thread::hardware_concurrency());
+            duplStrategy = GetArg2("-ds", "--duplStrategy", "info", false, Strings({ "info", "delete" }));
+            performanceReport = Cpl::ToVal<bool>(GetArg2("-pr", "--performanceReport", "1"));
         }
 
         ~Options()
