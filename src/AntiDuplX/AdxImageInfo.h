@@ -28,6 +28,14 @@
 
 namespace Adx
 {
+    enum ImageErorr
+    {
+        ImageOk = 0,
+        ImageLoadError,
+        ImageDecodeError,
+        ImageRemoveError,
+    };
+
     struct ImageInfo
     {
         String path;
@@ -38,6 +46,7 @@ namespace Adx
         size_t height;
         SimdImageFileType format;
         Matcher::HashPtr hash;
+        ImageErorr error;
 
         ImageInfo()
             : size(0)
@@ -45,6 +54,7 @@ namespace Adx
             , width(0)
             , height(0)
             , format(SimdImageFileUndefined)
+            , error(ImageOk)
         {
         }
     };

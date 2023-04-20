@@ -42,78 +42,118 @@ namespace Adx
 
         _matcher.Init(_options.compareThreshold, Matcher::Hash16x16, _imageInfos.size(), true);
 
-        SetProgress(0);
-        for (size_t i = 0; i < _imageInfos.size(); ++i)
+        SetProgress();
+        if (_options.loadThreads > 1)
         {
-            if (!LoadImage(i))
-                return false;
-            SetProgress(i);
+            _context.resize(ValidThreadNumber(_options.loadThreads, _imageInfos.size()));
+            for (size_t t = 0, block = DivHi(_imageInfos.size(), _context.size()); t < _context.size(); ++t)
+            {
+                size_t begin = t * block;
+                size_t end = std::min(_imageInfos.size(), begin + block);
+                _context[t].thread = std::thread(&ImageLoader::LoadThread, this, t, begin, end);
+            }
+
+            do
+            {
+                SetProgress();
+                Sleep(40);
+            } while (Processed() < _imageInfos.size());
+
+            for (size_t t = 0; t < _context.size(); ++t)
+                if (_context[t].thread.joinable())
+                    _context[t].thread.join();
         }
-        SetProgress(-1);
+        else
+        {
+            _context.resize(1);
+            LoadThread(0, 0, _imageInfos.size());
+        }
+        SetProgress();
 
         return true;
     }
 
-    void ImageLoader::SetProgress(size_t index)
+    void ImageLoader::LoadThread(size_t thread, size_t begin, size_t end)
     {
-        double progress = double(std::min(index, _imageInfos.size())) / double(_imageInfos.size());
+        CPL_PERF_FUNC();
+
+        Context& context = _context[thread];
+        for (context.index = 0; context.index + begin < end; context.index++)
+        {
+            if (_context.size() == 1)
+                SetProgress();
+            size_t index = context.index + begin;
+            ImageInfo& info = _imageInfos[index];
+            if (!LoadFile(context, info))
+                continue;
+            if (!DecodeImage(context, info))
+                continue;
+            CreateHash(context, info, index);
+        }
+    }
+
+    void ImageLoader::SetProgress()
+    {
+        size_t processed = Processed();
+        double progress = double(std::min(processed, _imageInfos.size())) / double(_imageInfos.size());
         if (progress >= _progress + 0.001 || progress == 1.0)
         {
             _progress = progress;
             std::cout << "\rLoad progress: " << std::fixed << std::setprecision(1) << _progress * 100.0 << "%" << std::flush;
-            if (index == -1)
+            if (processed == _imageInfos.size())
                 std::cout << std::endl;
         }
     }
 
-    bool ImageLoader::LoadImage(size_t index)
+    bool ImageLoader::LoadFile(Context& context, ImageInfo& info)
     {
         CPL_PERF_FUNC();
 
-        if (!LoadFile(index))
-            return false;
+        bool result = Cpl::LoadBinaryData(info.path, context.buffer);
 
-        if (!DecodeImage(index))
+        if (!result)
         {
-            CPL_LOG_SS(Verbose, "Can't decode '" << _imageInfos[index].path << "' image!");
-            return true;
+            info.error = ImageLoadError;
+            CPL_LOG_SS(Verbose, "Can't load '" << info.path << "' image!");
         }
 
-        if (!CreateHash(index))
-            return false;
-
-        return true;
+        return result;
     }
 
-    bool ImageLoader::LoadFile(size_t index)
+    bool ImageLoader::DecodeImage(Context& context, ImageInfo& info)
     {
         CPL_PERF_FUNC();
 
-        const ImageInfo& info = _imageInfos[index];
-        return Cpl::LoadBinaryData(info.path, _buffer);
-    }
-
-    bool ImageLoader::DecodeImage(size_t index)
-    {
-        CPL_PERF_FUNC();
-
-        const ImageInfo& info = _imageInfos[index];
-        if (_turboJpegDecoder.Enable() && info.format == SimdImageFileJpeg)
-            return _turboJpegDecoder.Decode(_buffer, _image);
+        bool result = false;
+        if (context.decoder.Enable() && info.format == SimdImageFileJpeg)
+            result = context.decoder.Decode(context.buffer, context.image);
         else
-            return _image.Load(_buffer.data(), _buffer.size());
+            result = context.image.Load(context.buffer.data(), context.buffer.size());
+
+        if (!result)
+        {
+            info.error = ImageDecodeError;
+            CPL_LOG_SS(Verbose, "Can't decode '" << info.path << "' image!");
+        }
+
+        return result;
     }
 
-    bool ImageLoader::CreateHash(size_t index)
+    void ImageLoader::CreateHash(Context& context, ImageInfo& info, size_t index)
     {
         CPL_PERF_FUNC();
 
-        ImageInfo& info = _imageInfos[index];
-        info.width = _image.width;
-        info.height = _image.height;
-        info.hash = _matcher.Create(_image, index);
+        info.width = context.image.width;
+        info.height = context.image.height;
+        info.hash = _matcher.Create(context.image, index);
+    }
 
-        return true;
+    size_t ImageLoader::Processed() const
+    {
+        size_t processed = 0;
+        for (size_t t = 0; t < _context.size(); ++t)
+            processed += _context[t].index;
+        return processed;
     }
 }
 

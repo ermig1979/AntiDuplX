@@ -56,5 +56,22 @@ namespace Adx
     typedef std::vector<uint8_t> Buffer;
     typedef std::vector<Buffer> Buffers;
     typedef std::vector<size_t> Indexes;
+
+    inline void Sleep(unsigned int miliseconds)
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(miliseconds));
+    }
+
+    inline size_t DivHi(size_t value, size_t divider)
+    {
+        return (value + divider - 1) / divider;
+    }
+
+    inline size_t ValidThreadNumber(size_t threads, size_t size)
+    {
+        threads = std::min(threads, size);
+        size_t block = DivHi(size, threads);
+        return std::min(threads, DivHi(size, block));
+    }
 }
 

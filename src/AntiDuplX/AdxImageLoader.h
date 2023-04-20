@@ -41,17 +41,27 @@ namespace Adx
     private:
         const Options & _options;
         ImageInfos & _imageInfos;
-        TurboJpegDecoder _turboJpegDecoder;
         Matcher _matcher;
-        Buffer _buffer;
-        View _image;
         double _progress;
+        struct Context
+        {
+            std::thread thread;
+            volatile size_t index;
+            Buffer buffer;
+            TurboJpegDecoder decoder;
+            View image;
+            Context()
+                : index(0)
+            {}
+        };
+        std::vector<Context> _context;
 
-        void SetProgress(size_t index);
-        bool LoadImage(size_t index);
-        bool LoadFile(size_t index);   
-        bool DecodeImage(size_t index);
-        bool CreateHash(size_t index);
+        void SetProgress();
+        void LoadThread(size_t thread, size_t begin, size_t end);
+        bool LoadFile(Context& context, ImageInfo& info);
+        bool DecodeImage(Context& context, ImageInfo& info);
+        void CreateHash(Context& context, ImageInfo& info, size_t index);
+        size_t Processed() const;
     };
 }
 
