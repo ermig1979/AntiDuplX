@@ -36,6 +36,8 @@ namespace Adx
         ImageRemoveError,
     };
 
+    typedef Simd::ImageMatcher<struct ImageInfo*, Simd::Allocator> Matcher;
+
     struct ImageInfo
     {
         String path;
@@ -59,9 +61,9 @@ namespace Adx
         }
     };
 
-    typedef std::vector<ImageInfo> ImageInfos;
+    typedef std::vector<ImageInfo*> ImageInfos;
 
-    CPL_INLINE String ToStr(SimdImageFileType format)
+    inline String ToStr(SimdImageFileType format)
     {
         switch (format)
         {
@@ -75,6 +77,38 @@ namespace Adx
         default:
             return "";
         }
+    }
+
+    inline int Compare(const ImageInfo& a, const ImageInfo& b)
+    {
+        size_t aArea = a.width * a.height;
+        size_t bArea = b.width * b.height;
+        if (aArea > bArea)
+            return 1;
+        if (aArea < bArea)
+            return -1;
+        if (a.format == b.format)
+        {
+            if (a.size > b.size)
+                return 1;
+            if (a.size < b.size)
+                return -1;
+        }
+        else if (a.format == SimdImageFilePng)
+            return 1;
+        else if (b.format == SimdImageFilePng)
+            return -1;
+        return 0;
+    }
+
+    CPL_INLINE bool Lesser(const ImageInfo* a, const ImageInfo* b)
+    {
+        return Compare(*a, *b) < 0;
+    }
+
+    CPL_INLINE bool Greater(const ImageInfo* a, const ImageInfo* b)
+    {
+        return Compare(*a, *b) > 0;
     }
 }
 

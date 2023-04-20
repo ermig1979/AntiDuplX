@@ -34,6 +34,13 @@ namespace Adx
 	{
 	}
 
+	Engine::~Engine()
+	{
+		for (size_t i = 0; i < _imageInfos.size(); ++i)
+			delete _imageInfos[i];
+		_imageInfos.clear();
+	}
+
 	bool Engine::Run()
 	{
 		CPL_PERF_FUNC();
@@ -56,7 +63,7 @@ namespace Adx
 	{
 		size_t remove = 0;
 		for (size_t i = 0; i < _imageInfos.size(); ++i)
-			if (_imageInfos[i].remove)
+			if (_imageInfos[i]->remove)
 				remove++;
 		CPL_LOG_SS(Info, remove << " duplicates were found from " << _imageInfos.size() << " images.");
 #if 0

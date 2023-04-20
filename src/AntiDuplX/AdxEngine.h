@@ -36,6 +36,7 @@ namespace Adx
     {
     public:
         Engine(const Options& options);
+        ~Engine();
 
         bool Run();
 

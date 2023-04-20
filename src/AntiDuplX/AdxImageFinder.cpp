@@ -35,8 +35,7 @@ namespace Adx
     {
         CPL_PERF_FUNC();
 
-        CPL_LOG_SS(Info, "Search images:");
-
+        _begin = 0, _previous = 0;
         for (size_t d = 0; d < _options.imageDirectories.size(); ++d)
         {
             if (!Find(Path(_options.imageDirectories[d])))
@@ -47,7 +46,7 @@ namespace Adx
 
     bool ImageFinder::Find(const Path& path)
     {
-        CPL_PERF_FUNC();
+        CPL_LOG_SS(Info, "Search images in '" << path.string() << "':");
 
         fs::file_status status = fs::status(path);
         if (!fs::exists(status))
@@ -61,7 +60,7 @@ namespace Adx
             return false;
         }
 
-        size_t before = _imageInfos.size();
+        size_t _begin = _imageInfos.size();
         if (_options.subDirectories)
         {
             for (fs::recursive_directory_iterator it(path); it != fs::recursive_directory_iterator(); ++it)
@@ -78,7 +77,7 @@ namespace Adx
                     Push(*it);
             }
         }
-        CPL_LOG_SS(Info, _imageInfos.size() - before << " images were found in '" << path.string() << "'.");
+        Annotate(true);
 
         return true;
     }
@@ -94,18 +93,30 @@ namespace Adx
 
     void ImageFinder::Push(const DirEntry& entry)
     {
-        ImageInfo info;
-        info.path = entry.path().string();
-        info.size = entry.file_size();
-        info.time = entry.last_write_time();
+        ImageInfo * info = new ImageInfo();
+        info->path = entry.path().string();
+        info->size = entry.file_size();
+        info->time = entry.last_write_time();
         String ext = Cpl::ToLowerCase(entry.path().extension().string());
         if (ext == ".png")
-            info.format = SimdImageFilePng;
+            info->format = SimdImageFilePng;
         else if (ext == ".jpg")
-            info.format = SimdImageFileJpeg;
+            info->format = SimdImageFileJpeg;
         else
-            info.format = SimdImageFileUndefined;
+            info->format = SimdImageFileUndefined;
         _imageInfos.push_back(info);
+        Annotate(false);
+    }
+
+    void ImageFinder::Annotate(bool last)
+    {
+        if (last || _imageInfos.size() >= _previous + 1000)
+        {
+            _previous = _imageInfos.size();
+            std::cout << _previous - _begin << "\r" << std::flush;
+        }
+        if(last)
+            std::cout << std::endl << std::flush;
     }
 }
 

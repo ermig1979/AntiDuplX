@@ -40,12 +40,21 @@ namespace Adx
     private:
         const Options & _options;
         ImageInfos & _imageInfos;
-        Matcher _matcher;
+        struct Context
+        {
+            std::thread thread;
+            volatile size_t index;
+            Matcher matcher;
+            Context()
+                : index(0)
+            {}
+        };
+        std::vector<Context> _context;
         double _progress;
 
-        void SetProgress(size_t index);
-        bool MatchImage(size_t index);
-        int Compare(const ImageInfo& a, const ImageInfo& b) const;
+        void MatchThread(size_t thread);
+        void SetProgress();
+        size_t Processed() const;
     };
 }
 

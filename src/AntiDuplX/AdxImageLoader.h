@@ -60,7 +60,7 @@ namespace Adx
         void LoadThread(size_t thread, size_t begin, size_t end);
         bool LoadFile(Context& context, ImageInfo& info);
         bool DecodeImage(Context& context, ImageInfo& info);
-        void CreateHash(Context& context, ImageInfo& info, size_t index);
+        void CreateHash(Context& context, ImageInfo& info);
         size_t Processed() const;
     };
 }

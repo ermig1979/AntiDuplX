@@ -75,20 +75,18 @@ namespace Adx
 
     void ImageLoader::LoadThread(size_t thread, size_t begin, size_t end)
     {
-        CPL_PERF_FUNC();
-
         Context& context = _context[thread];
         for (context.index = 0; context.index + begin < end; context.index++)
         {
             if (_context.size() == 1)
                 SetProgress();
             size_t index = context.index + begin;
-            ImageInfo& info = _imageInfos[index];
+            ImageInfo& info = *_imageInfos[index];
             if (!LoadFile(context, info))
                 continue;
             if (!DecodeImage(context, info))
                 continue;
-            CreateHash(context, info, index);
+            CreateHash(context, info);
         }
     }
 
@@ -107,45 +105,38 @@ namespace Adx
 
     bool ImageLoader::LoadFile(Context& context, ImageInfo& info)
     {
-        CPL_PERF_FUNC();
-
+        //CPL_PERF_FUNC();
         bool result = Cpl::LoadBinaryData(info.path, context.buffer);
-
         if (!result)
         {
             info.error = ImageLoadError;
             CPL_LOG_SS(Verbose, "Can't load '" << info.path << "' image!");
         }
-
         return result;
     }
 
     bool ImageLoader::DecodeImage(Context& context, ImageInfo& info)
     {
-        CPL_PERF_FUNC();
-
+        //CPL_PERF_FUNC();
         bool result = false;
         if (context.decoder.Enable() && info.format == SimdImageFileJpeg)
             result = context.decoder.Decode(context.buffer, context.image);
         else
             result = context.image.Load(context.buffer.data(), context.buffer.size());
-
         if (!result)
         {
             info.error = ImageDecodeError;
             CPL_LOG_SS(Verbose, "Can't decode '" << info.path << "' image!");
         }
-
         return result;
     }
 
-    void ImageLoader::CreateHash(Context& context, ImageInfo& info, size_t index)
+    void ImageLoader::CreateHash(Context& context, ImageInfo& info)
     {
-        CPL_PERF_FUNC();
-
+        //CPL_PERF_FUNC();
         info.width = context.image.width;
         info.height = context.image.height;
-        info.hash = _matcher.Create(context.image, index);
+        info.hash = _matcher.Create(context.image, &info);
     }
 
     size_t ImageLoader::Processed() const

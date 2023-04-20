@@ -44,82 +44,77 @@ namespace Adx
 
         CPL_LOG_SS(Info, "Match images: ");
 
-        _matcher.Init(_options.compareThreshold, Matcher::Hash16x16, _imageInfos.size(), true);
+        SetProgress();        
+        
+        std::sort(_imageInfos.begin(), _imageInfos.end(), Lesser);
 
-        SetProgress(0);
-        for (size_t i = 0; i < _imageInfos.size(); ++i)
+        if (_options.matchThreads > 1)
         {
-            if (!MatchImage(i))
-                return false;
-            SetProgress(i);
+            _context.resize(ValidThreadNumber(_options.matchThreads, _imageInfos.size()));
+            for (size_t t = 0; t < _context.size(); ++t)
+                _context[t].thread = std::thread(&ImageMatcher::MatchThread, this, t);
+
+            do
+            {
+                SetProgress();
+                Sleep(40);
+            } while (Processed() < _imageInfos.size());
+
+            for (size_t t = 0; t < _context.size(); ++t)
+                if (_context[t].thread.joinable())
+                    _context[t].thread.join();
         }
-        SetProgress(-1);
+        else
+        {
+            _context.resize(1);
+            MatchThread(0);
+        }
+        SetProgress();
 
         return true;
     }
 
-    void ImageMatcher::SetProgress(size_t index)
+    void ImageMatcher::MatchThread(size_t thread)
     {
-        double progress = double(std::min(index, _imageInfos.size())) / double(_imageInfos.size());
+        Context& context = _context[thread];
+        context.matcher.Init(_options.compareThreshold, Matcher::Hash16x16, std::max<size_t>(_imageInfos.size() / _context.size(), 1), true);
+        for (context.index = 0; context.index < _imageInfos.size(); context.index++)
+        {
+            if (_context.size() == 1)
+                SetProgress();
+            ImageInfo& info = *_imageInfos[context.index];
+            if (!info.hash)
+                continue;
+            Matcher::Results results;
+            if (context.matcher.Find(info.hash, results))
+            {
+				for (size_t r = 0; r < results.size(); ++r)
+				    results[r].hash->tag->remove = true;
+            }
+            if(context.index % _context.size() == thread)
+                context.matcher.Add(info.hash);
+        }
+    }
+
+    void ImageMatcher::SetProgress()
+    {
+        size_t processed = Processed();
+        double progress = double(std::min(processed, _imageInfos.size())) / double(_imageInfos.size());
         if (progress >= _progress + 0.001 || progress == 1.0)
         {
             _progress = progress;
             std::cout << "\rMatch progress: " << std::fixed << std::setprecision(1) << _progress * 100.0 << "%" << std::flush;
-            if (index == -1)
+            if (processed == _imageInfos.size())
                 std::cout << std::endl;
         }
     }
 
-    bool ImageMatcher::MatchImage(size_t index)
+    size_t ImageMatcher::Processed() const
     {
-        ImageInfo & info = _imageInfos[index];
-        if (!info.hash)
-            return true;
-        Matcher::Results results;
-        if (_matcher.Find(info.hash, results))
-        {
-            size_t best = 0;
-            for (size_t i = 1; i < results.size(); ++i)
-            {
-                if (results[i].difference < results[best].difference)
-                    best = i;
-            }
-            int compare = Compare(info, _imageInfos[results[best].hash->tag]);
-            if (compare <= 0)
-            {
-                info.remove = true;
-                return true;
-            }
-            else
-            {
-                _matcher.Skip(results[best].hash);
-                _imageInfos[results[best].hash->tag].remove = true;
-            }
-        }
-        _matcher.Add(info.hash);
-        return true;
-    }
-
-    int ImageMatcher::Compare(const ImageInfo& a, const ImageInfo& b) const
-    {
-        size_t aArea = a.width * a.height;
-        size_t bArea = b.width * b.height;
-        if (aArea > bArea)
-            return 1;
-        if (aArea < bArea)
-            return -1;
-        if (a.format == b.format)
-        {
-            if (a.size > b.size)
-                return 1;
-            if (a.size < b.size)
-                return -1;
-        }
-        else if (a.format == SimdImageFilePng)
-            return 1;
-        else if (b.format == SimdImageFilePng)
-            return -1;
-        return 0;
+        size_t processed = 0;
+        for (size_t t = 0; t < _context.size(); ++t)
+            processed += _context[t].index;
+        return processed / std::max<size_t>(1, _context.size());
     }
 }
 

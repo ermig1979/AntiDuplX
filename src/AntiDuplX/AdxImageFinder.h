@@ -44,10 +44,12 @@ namespace Adx
     private:
         const Options & _options;
         ImageInfos & _imageInfos;
+        size_t _begin, _previous;
 
         bool Find(const Path& path);
         bool IsWanted(const Path& path);
         void Push(const DirEntry &entry);
+        void Annotate(bool last = false);
     };
 }
 
