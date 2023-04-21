@@ -47,6 +47,11 @@ namespace Adx
         Options(int argc, char* argv[])
             : ArgsParser(argc, argv, true)
         {
+            if (HasArg("-h", "--help"))
+            {
+                PrintHelp();
+                exit(0);
+            }
             imageDirectories = GetArgs(Strings({ "-id", "--imageDirectories" }), Strings({"."}));
             imageExtensions = GetArgs(Strings({ "-ie", "--imageExtensions" }), Strings( { ".jpg", ".png"}));
             subDirectories = Cpl::ToVal<bool>(GetArg2("-sd", "--subDirectory", "1"));
@@ -54,13 +59,27 @@ namespace Adx
             performanceReport = Cpl::ToVal<bool>(GetArg2("-pr", "--performanceReport", "1"));
             compareThreshold = Cpl::ToVal<double>(GetArg2("-ct", "--compareThreshold", "0.05", false));
             threadNumber = std::min<size_t>(std::max<size_t>(Cpl::ToVal<size_t>(GetArg2("-lt", "--threadNumber", "-1", false)), 1), std::thread::hardware_concurrency());
-            outFile = GetArg2("-of", "--outFile", "", false);
+            outFile = GetArg2("-of", "--outFile", "out.txt", false);
             deleteDupls = Cpl::ToVal<bool>(GetArg2("-dd", "--deleteDupls", "0"));
             deleteBads = Cpl::ToVal<bool>(GetArg2("-db", "--deleteBads", "0"));
         }
 
         ~Options()
         {
+        }
+
+        void PrintHelp()
+        {
+            std::cout << "AntiDuplX is a command line tool to search of simular images." << std::endl << std::endl;
+            std::cout << "Using example:" << std::endl << std::endl;
+            std::cout << "  ./AntiDuplX -id=./pict_dir_1 -ct=0.05 -id=./pict_dir_2 -of=./dupl_list.txt" << std::endl << std::endl;
+            std::cout << "Where following parameters are used:" << std::endl << std::endl;
+            std::cout << "  -id=./pict_dir_1       - a path to directory with images. " << std::endl;
+            std::cout << "                           You can set several directories." << std::endl << std::endl;
+            std::cout << "  -ct=0.05               - an image compare threshold." << std::endl;
+            std::cout << "                           Standard deviation threshold for duplictes." << std::endl;
+            std::cout << "                           By default it is equal to 0.05." << std::endl << std::endl;
+            std::cout << "  -of=./dupl_list.txt or - a file name to save list with found duplicated and damaged images." << std::endl << std::endl;
         }
     };
 }
