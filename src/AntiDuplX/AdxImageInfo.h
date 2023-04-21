@@ -33,7 +33,6 @@ namespace Adx
         ImageOk = 0,
         ImageLoadError,
         ImageDecodeError,
-        ImageRemoveError,
     };
 
     typedef Simd::ImageMatcher<struct ImageInfo*, Simd::Allocator> Matcher;
@@ -43,20 +42,22 @@ namespace Adx
         String path;
         size_t size;
         FileTime time;
-        bool remove;
         size_t width;
         size_t height;
         SimdImageFileType format;
         Matcher::HashPtr hash;
         ImageErorr error;
+        ImageInfo* duplicate;
+        double difference;
 
         ImageInfo()
             : size(0)
-            , remove(false)
             , width(0)
             , height(0)
             , format(SimdImageFileUndefined)
             , error(ImageOk)
+            , duplicate(NULL)
+            , difference(DBL_MAX)
         {
         }
     };

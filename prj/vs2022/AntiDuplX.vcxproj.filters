@@ -19,6 +19,9 @@
     <ClCompile Include="..\..\src\AntiDuplX\AdxTurboJpegDecoder.cpp">
       <Filter>AntiDuplX</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\AntiDuplX\AdxResultHandler.cpp">
+      <Filter>AntiDuplX</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="AntiDuplX">
@@ -99,6 +102,9 @@
       <Filter>AntiDuplX</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\AntiDuplX\AdxTurboJpegDecoder.h">
+      <Filter>AntiDuplX</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\AntiDuplX\AdxResultHandler.h">
       <Filter>AntiDuplX</Filter>
     </ClInclude>
   </ItemGroup>

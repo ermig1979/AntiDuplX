@@ -48,9 +48,9 @@ namespace Adx
         
         std::sort(_imageInfos.begin(), _imageInfos.end(), Lesser);
 
-        if (_options.matchThreads > 1)
+        if (_options.threadNumber > 1)
         {
-            _context.resize(ValidThreadNumber(_options.matchThreads, _imageInfos.size()));
+            _context.resize(ValidThreadNumber(_options.threadNumber, _imageInfos.size()));
             for (size_t t = 0; t < _context.size(); ++t)
                 _context[t].thread = std::thread(&ImageMatcher::MatchThread, this, t);
 
@@ -88,8 +88,16 @@ namespace Adx
             Matcher::Results results;
             if (context.matcher.Find(info.hash, results))
             {
-				for (size_t r = 0; r < results.size(); ++r)
-				    results[r].hash->tag->remove = true;
+                for (size_t r = 0; r < results.size(); ++r)
+                {
+                    ImageInfo& dupl = *results[r].hash->tag;
+                    if (results[r].difference < dupl.difference)
+                    {
+                        dupl.difference = results[r].difference;
+                        dupl.duplicate = &info;
+                    }
+                    //results[r].hash->tag->remove = true;
+                }
             }
             if(context.index % _context.size() == thread)
                 context.matcher.Add(info.hash);

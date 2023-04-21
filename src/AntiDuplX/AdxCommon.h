@@ -33,6 +33,8 @@
 #include "Simd/SimdView.hpp"
 #include "Simd/SimdImageMatcher.hpp"
 
+#include <float.h>
+
 #include <filesystem>
 
 #ifdef LoadImage

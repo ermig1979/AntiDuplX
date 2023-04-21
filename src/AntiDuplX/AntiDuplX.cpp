@@ -29,8 +29,6 @@ int main(int argc, char* argv[])
     Adx::Options options(argc, argv);
 
     Cpl::Log::Global().AddStdWriter(options.logLevel);
-    if (!options.logFile.empty())
-        Cpl::Log::Global().AddFileWriter(options.logLevel, options.logFile);
     Cpl::Log::Global().SetFlags(Cpl::Log::BashFlags);
 
     Adx::Engine engine(options);

@@ -31,6 +31,7 @@ namespace Adx
 		, _imageFinder(options, _imageInfos)
 		, _imageLoader(options, _imageInfos)
 		, _imageMatcher(options, _imageInfos)
+		, _resultHandler(options, _imageInfos)
 	{
 	}
 
@@ -54,31 +55,10 @@ namespace Adx
 		if (!_imageMatcher.Run())
 			return false;
 
-		Print();
+		if (!_resultHandler.Run())
+			return false;
 
 		return true;
-	}
-
-	void Engine::Print()
-	{
-		size_t remove = 0;
-		for (size_t i = 0; i < _imageInfos.size(); ++i)
-			if (_imageInfos[i]->remove)
-				remove++;
-		CPL_LOG_SS(Info, remove << " duplicates were found from " << _imageInfos.size() << " images.");
-#if 0
-		for (size_t i = 0; i < _imageInfos.size(); ++i)
-		{
-			const ImageInfo& info = _imageInfos[i];
-			if (!info.remove)
-				continue;
-			std::cout << info.path << " ";
-			std::cout << info.size / 1024 << " kb ";
-			std::cout << "[" << info.width << "x" << info.height << "] ";
-			std::cout << (info.remove ? "~~~ REMOVE ~~~" : "" );
-			std::cout << std::endl;
-		}
-#endif
 	}
 }
 

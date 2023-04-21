@@ -43,9 +43,9 @@ namespace Adx
         _matcher.Init(_options.compareThreshold, Matcher::Hash16x16, _imageInfos.size(), true);
 
         SetProgress();
-        if (_options.loadThreads > 1)
+        if (_options.threadNumber > 1)
         {
-            _context.resize(ValidThreadNumber(_options.loadThreads, _imageInfos.size()));
+            _context.resize(ValidThreadNumber(_options.threadNumber, _imageInfos.size()));
             for (size_t t = 0, block = DivHi(_imageInfos.size(), _context.size()); t < _context.size(); ++t)
             {
                 size_t begin = t * block;

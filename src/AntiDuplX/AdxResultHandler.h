@@ -26,28 +26,26 @@
 
 #include "AntiDuplX/AdxCommon.h"
 #include "AntiDuplX/AdxOptions.h"
-#include "AntiDuplX/AdxImageFinder.h"
-#include "AntiDuplX/AdxImageLoader.h"
-#include "AntiDuplX/AdxImageMatcher.h"
-#include "AntiDuplX/AdxResultHandler.h"
+#include "AntiDuplX/AdxImageInfo.h"
 
 namespace Adx
 {
-    class Engine
+    class ResultHandler
     {
     public:
-        Engine(const Options& options);
-        ~Engine();
+        ResultHandler(const Options & options, ImageInfos &imageInfos)
+            : _options(options)
+            , _imageInfos(imageInfos)
+        {
+        }
 
         bool Run();
 
     private:
         const Options & _options;
-        ImageInfos _imageInfos;
-        ImageFinder _imageFinder;
-        ImageLoader _imageLoader;
-        ImageMatcher _imageMatcher;
-        ResultHandler _resultHandler;
+        ImageInfos & _imageInfos;
+
+        bool SaveOutFile();
     };
 }
 
