@@ -25,6 +25,7 @@
 #pragma once
 
 #include "AntiDuplX/AdxCommon.h"
+#include "AntiDuplX/AdxImageInfo.h"
 
 #include "Cpl/Args.h"
 #include "Cpl/Log.h"
@@ -39,6 +40,7 @@ namespace Adx
         Cpl::Log::Level logLevel;
         bool performanceReport;
         double compareThreshold;
+        Matcher::HashType compareSize;
         size_t threadNumber;
         String outFile;
         bool deleteDupls;
@@ -58,6 +60,7 @@ namespace Adx
             logLevel = (Cpl::Log::Level)Cpl::ToVal<Int>(GetArg2("-ll", "--logLevel", "3", false));
             performanceReport = Cpl::ToVal<bool>(GetArg2("-pr", "--performanceReport", "0"));
             compareThreshold = Cpl::ToVal<double>(GetArg2("-ct", "--compareThreshold", "0.05", false));
+            compareSize = ToHashType(GetArg2("-cs", "--compareSize", "16x16", false));
             threadNumber = std::min<size_t>(std::max<size_t>(Cpl::ToVal<size_t>(GetArg2("-tn", "--threadNumber", "-1", false)), 1), std::thread::hardware_concurrency());
             outFile = GetArg2("-of", "--outFile", "out.txt", false);
             deleteDupls = Cpl::ToVal<bool>(GetArg2("-dd", "--deleteDupls", "0"));
@@ -92,12 +95,32 @@ namespace Adx
             std::cout << "                                       By default this parameter is equal to 3 (Info)." << std::endl << std::endl;
             std::cout << "  --performanceReport=1 or -pr=1     - a flag to print performance report." << std::endl;
             std::cout << "                                       By default this parameter is turned off." << std::endl << std::endl;
+            std::cout << "  --compareSize=16x16 or -cs=16x16   - an image compare size. It can be 16x16, 32x32 or 64x64." << std::endl;
+            std::cout << "                                       By default this parameter is equal to 16x16." << std::endl << std::endl;
             std::cout << "  --threadNumber=4 or -tn=4          - a number of work threads to load and compare images." << std::endl;
             std::cout << "                                       By default this parameter is equal to -1 (use of all available threads)." << std::endl << std::endl;
             std::cout << "  --deleteDupls=1 or -dd=1           - a flag to auto delete found image duplicates." << std::endl;
             std::cout << "                                       By default this parameter is turned off." << std::endl << std::endl;
             std::cout << "  --deleteBads=1 or -db=1            - a flag to auto delete found bad (damaged) images." << std::endl;
             std::cout << "                                       By default this parameter is turned off." << std::endl << std::endl;
+        }
+
+    private:
+
+        Matcher::HashType ToHashType(const String& str)
+        {
+            if (str == "16x16")
+                return Matcher::Hash16x16;
+            else if (str == "32x32")
+                return Matcher::Hash32x32;
+            else if (str == "64x64")
+                return Matcher::Hash64x64;
+            else
+            {
+                CPL_LOG_SS(Error, "Invalid parameter --compareSize=" << str << "! . It can be 16x16, 32x32 or 64x64.");
+                exit(1);
+                return Matcher::Hash16x16;
+            }
         }
     };
 }

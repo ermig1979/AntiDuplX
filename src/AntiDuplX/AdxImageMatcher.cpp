@@ -77,7 +77,7 @@ namespace Adx
     void ImageMatcher::MatchThread(size_t thread)
     {
         Context& context = _context[thread];
-        context.matcher.Init(_options.compareThreshold, Matcher::Hash16x16, std::max<size_t>(_imageInfos.size() / _context.size(), 1), true);
+        context.matcher.Init(_options.compareThreshold, _options.compareSize, std::max<size_t>(_imageInfos.size() / _context.size(), 1), true);
         for (context.index = 0; context.index < _imageInfos.size(); context.index++)
         {
             if (_context.size() == 1)
@@ -96,7 +96,6 @@ namespace Adx
                         dupl.difference = results[r].difference;
                         dupl.duplicate = &info;
                     }
-                    //results[r].hash->tag->remove = true;
                 }
             }
             if(context.index % _context.size() == thread)

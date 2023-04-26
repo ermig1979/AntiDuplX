@@ -40,7 +40,7 @@ namespace Adx
 
         CPL_LOG_SS(Info, "Load images: ");
 
-        _matcher.Init(_options.compareThreshold, Matcher::Hash16x16, _imageInfos.size(), true);
+        _matcher.Init(_options.compareThreshold, _options.compareSize, _imageInfos.size(), true);
 
         SetProgress();
         if (_options.threadNumber > 1)
