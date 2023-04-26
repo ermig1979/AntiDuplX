@@ -56,9 +56,9 @@ namespace Adx
             imageExtensions = GetArgs(Strings({ "-ie", "--imageExtensions" }), Strings( { ".jpg", ".png"}));
             subDirectories = Cpl::ToVal<bool>(GetArg2("-sd", "--subDirectory", "1"));
             logLevel = (Cpl::Log::Level)Cpl::ToVal<Int>(GetArg2("-ll", "--logLevel", "3", false));
-            performanceReport = Cpl::ToVal<bool>(GetArg2("-pr", "--performanceReport", "1"));
+            performanceReport = Cpl::ToVal<bool>(GetArg2("-pr", "--performanceReport", "0"));
             compareThreshold = Cpl::ToVal<double>(GetArg2("-ct", "--compareThreshold", "0.05", false));
-            threadNumber = std::min<size_t>(std::max<size_t>(Cpl::ToVal<size_t>(GetArg2("-lt", "--threadNumber", "-1", false)), 1), std::thread::hardware_concurrency());
+            threadNumber = std::min<size_t>(std::max<size_t>(Cpl::ToVal<size_t>(GetArg2("-tn", "--threadNumber", "-1", false)), 1), std::thread::hardware_concurrency());
             outFile = GetArg2("-of", "--outFile", "out.txt", false);
             deleteDupls = Cpl::ToVal<bool>(GetArg2("-dd", "--deleteDupls", "0"));
             deleteBads = Cpl::ToVal<bool>(GetArg2("-db", "--deleteBads", "0"));
@@ -74,12 +74,30 @@ namespace Adx
             std::cout << "Using example:" << std::endl << std::endl;
             std::cout << "  ./AntiDuplX -id=./pict_dir_1 -ct=0.05 -id=./pict_dir_2 -of=./dupl_list.txt" << std::endl << std::endl;
             std::cout << "Where following parameters are used:" << std::endl << std::endl;
-            std::cout << "  -id=./pict_dir_1       - a path to directory with images. " << std::endl;
-            std::cout << "                           You can set several directories." << std::endl << std::endl;
-            std::cout << "  -ct=0.05               - an image compare threshold." << std::endl;
-            std::cout << "                           Standard deviation threshold for duplictes." << std::endl;
-            std::cout << "                           By default it is equal to 0.05." << std::endl << std::endl;
-            std::cout << "  -of=./dupl_list.txt or - a file name to save list with found duplicated and damaged images." << std::endl << std::endl;
+            std::cout << "  -id=./pict_dir_1 or --imageDirectories=./pict_dir_1 - a path to directory with images. " << std::endl;
+            std::cout << "                                                       You can set several directories." << std::endl << std::endl;
+            std::cout << "  -ct=0.05 or --compareThreshold=0.05                - an image compare threshold." << std::endl;
+            std::cout << "                                                       Standard deviation threshold for duplictes." << std::endl;
+            std::cout << "                                                       By default it is equal to 0.05." << std::endl << std::endl;
+            std::cout << "  -of=./dupl_list.txt or --outFile=./dupl_list.txt   - a file name to save list with found duplicated and damaged images." << std::endl;
+            std::cout << "                                                       A path to image with poor quality is printed at the beginning of line." << std::endl << std::endl;
+            std::cout << "Also you can use parameters: " << std::endl << std::endl;
+            std::cout << "  --help or -h                       - to print this help message." << std::endl << std::endl;
+            std::cout << "  --imageExtensions=.jpg or -ie=.jpg - an image file extensions to search." << std::endl;
+            std::cout << "                                       You can set several extensions." << std::endl;
+            std::cout << "                                       By default this parameter is equal to (.jpg, .png)." << std::endl << std::endl;
+            std::cout << "  --subDirectories=1 or -sd=1        - to search images in sub-directories." << std::endl;
+            std::cout << "                                       By default this parameter is turned on." << std::endl << std::endl;
+            std::cout << "  --logLevel=3 or -ll=3              - a log level. It can be: 0 - None, 1 - Error, 2 - Warning, 3 - Info, 4 - Verbose, 5 - Debug." << std::endl;
+            std::cout << "                                       By default this parameter is equal to 3 (Info)." << std::endl << std::endl;
+            std::cout << "  --performanceReport=1 or -pr=1     - a flag to print performance report." << std::endl;
+            std::cout << "                                       By default this parameter is turned off." << std::endl << std::endl;
+            std::cout << "  --threadNumber=4 or -tn=4          - a number of work threads to load and compare images." << std::endl;
+            std::cout << "                                       By default this parameter is equal to -1 (use of all available threads)." << std::endl << std::endl;
+            std::cout << "  --deleteDupls=1 or -dd=1           - a flag to auto delete found image duplicates." << std::endl;
+            std::cout << "                                       By default this parameter is turned off." << std::endl << std::endl;
+            std::cout << "  --deleteBads=1 or -db=1            - a flag to auto delete found bad (damaged) images." << std::endl;
+            std::cout << "                                       By default this parameter is turned off." << std::endl << std::endl;
         }
     };
 }
