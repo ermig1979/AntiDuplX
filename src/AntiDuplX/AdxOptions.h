@@ -27,6 +27,10 @@
 #include "AntiDuplX/AdxCommon.h"
 #include "AntiDuplX/AdxImageInfo.h"
 
+#if !defined(ADX_VERSION)
+#include "AntiDuplX/AdxVersion.h"
+#endif
+
 #include "Cpl/Args.h"
 #include "Cpl/Log.h"
 
@@ -54,6 +58,11 @@ namespace Adx
                 PrintHelp();
                 exit(0);
             }
+            if (HasArg("-v", "--version"))
+            {
+                PrintVersion();
+                exit(0);
+            }
             imageDirectories = GetArgs(Strings({ "-id", "--imageDirectories" }), Strings({"."}));
             imageExtensions = GetArgs(Strings({ "-ie", "--imageExtensions" }), Strings( { ".jpg", ".png"}));
             subDirectories = Cpl::ToVal<bool>(GetArg2("-sd", "--subDirectory", "1"));
@@ -71,6 +80,8 @@ namespace Adx
         {
         }
 
+
+    private:
         void PrintHelp()
         {
             std::cout << "AntiDuplX is a command line tool to search of simular images." << std::endl << std::endl;
@@ -80,12 +91,13 @@ namespace Adx
             std::cout << "  -id=./pict_dir_1 or --imageDirectories=./pict_dir_1 - a path to directory with images. " << std::endl;
             std::cout << "                                                       You can set several directories." << std::endl << std::endl;
             std::cout << "  -ct=0.05 or --compareThreshold=0.05                - an image compare threshold." << std::endl;
-            std::cout << "                                                       Standard deviation threshold for duplictes." << std::endl;
+            std::cout << "                                                       Standard deviation threshold for duplicates." << std::endl;
             std::cout << "                                                       By default it is equal to 0.05." << std::endl << std::endl;
             std::cout << "  -of=./dupl_list.txt or --outFile=./dupl_list.txt   - a file name to save list with found duplicated and damaged images." << std::endl;
             std::cout << "                                                       A path to image with poor quality is printed at the beginning of line." << std::endl << std::endl;
             std::cout << "Also you can use parameters: " << std::endl << std::endl;
             std::cout << "  --help or -h                       - to print this help message." << std::endl << std::endl;
+            std::cout << "  --version or -v                    - to print AntiDuplX version." << std::endl << std::endl;
             std::cout << "  --imageExtensions=.jpg or -ie=.jpg - an image file extensions to search." << std::endl;
             std::cout << "                                       You can set several extensions." << std::endl;
             std::cout << "                                       By default this parameter is equal to (.jpg, .png)." << std::endl << std::endl;
@@ -103,9 +115,12 @@ namespace Adx
             std::cout << "                                       By default this parameter is turned off." << std::endl << std::endl;
             std::cout << "  --deleteBads=1 or -db=1            - a flag to auto delete found bad (damaged) images." << std::endl;
             std::cout << "                                       By default this parameter is turned off." << std::endl << std::endl;
-        }
+        } 
 
-    private:
+        void PrintVersion()
+        {
+            std::cout << "AntiDuplX-" << ADX_VERSION << std::endl;
+        }
 
         Matcher::HashType ToHashType(const String& str)
         {

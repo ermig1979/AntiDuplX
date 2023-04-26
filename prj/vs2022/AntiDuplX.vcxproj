@@ -17,6 +17,9 @@
     <Link>
       <SubSystem>Console</SubSystem>
     </Link>
+    <PreBuildEvent>
+      <Command>"$(ProjectDir)..\cmd\GetVersion.cmd" "$(ProjectDir)..\.." "1"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\AntiDuplX\AdxEngine.cpp" />
