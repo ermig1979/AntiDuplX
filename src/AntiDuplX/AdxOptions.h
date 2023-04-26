@@ -86,7 +86,7 @@ namespace Adx
         {
             std::cout << "AntiDuplX is a command line tool to search of simular images." << std::endl << std::endl;
             std::cout << "Using example:" << std::endl << std::endl;
-            std::cout << "  ./AntiDuplX -id=./pict_dir_1 -ct=0.05 -id=./pict_dir_2 -of=./dupl_list.txt" << std::endl << std::endl;
+            std::cout << "  ./AntiDuplX -id=./pict_dir_1 -id=./pict_dir_2 -ct=0.05 -of=./dupl_list.txt" << std::endl << std::endl;
             std::cout << "Where following parameters are used:" << std::endl << std::endl;
             std::cout << "  -id=./pict_dir_1 or --imageDirectories=./pict_dir_1 - a path to directory with images. " << std::endl;
             std::cout << "                                                       You can set several directories." << std::endl << std::endl;
