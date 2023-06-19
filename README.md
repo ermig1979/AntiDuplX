@@ -48,7 +48,7 @@ Also you can use parameters:
 * `--subDirectories=1` or `-sd=1` - to search images in sub-directories. By default this parameter is turned on.
 * `--logLevel=3` or `-ll=3` - a log level. It can be: 0 - None, 1 - Error, 2 - Warning, 3 - Info, 4 - Verbose, 5 - Debug. By default this parameter is equal to 3 (Info).
 * `--performanceReport=1` or `-pr=1` - a flag to print performance report. By default this parameter is turned off.
-* `--compareSize=16x16` or `-cs=16x16` - an image compare size. It can be 16x16, 32x32 or 64x64. By default this parameter is equal to 16x16.
+* `--compareSize=32x32` or `-cs=32x32` - an image compare size. It can be 16x16, 32x32 or 64x64. By default this parameter is equal to 32x32.
 * `--threadNumber=4` or `-tn=4` - a number of work threads to load and compare images. By default this parameter is equal to -1 (use of all available threads).
 * `--deleteDupls=1` or `-dd=1` - a flag to auto delete found image duplicates. By default this parameter is turned off.
 * `--deleteBads=1` or `-db=1` - a flag to auto delete found bad (damaged) images. By default this parameter is turned off.
