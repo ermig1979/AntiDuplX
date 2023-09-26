@@ -3,6 +3,7 @@ project(AntiDuplX)
 
 option(ADX_INFO "Print build information" ON)
 option(ADX_GET_VERSION "Get AntiDuplX version" ON)
+option(ADX_USE_SYSTEM_TURBOJPEG "Use system libjpeg-turbo" OFF)
 
 set(ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../..)
 
@@ -12,7 +13,11 @@ include_directories(${ROOT_DIR}/3rd/Cpl/src)
 
 include(${ROOT_DIR}/prj/cmake/Simd.cmake)
 
-include(${ROOT_DIR}/prj/cmake/libjpeg-turbo.cmake)
+if(ADX_USE_SYSTEM_TURBOJPEG)
+	find_package(libjpeg-turbo REQUIRED)
+else()
+	include(${ROOT_DIR}/prj/cmake/libjpeg-turbo.cmake)
+endif()
 
 if(ADX_GET_VERSION)
 	if (WIN32 AND NOT (CYGWIN OR MSYS))
@@ -27,6 +32,10 @@ endif()
 
 file(GLOB_RECURSE ADX_SRC ${ROOT_DIR}/src/AntiDuplX/*.cpp)
 add_executable(AntiDuplX ${ADX_SRC})
-target_link_libraries(AntiDuplX ${SIMD_LIB} ${TURBOJPEG_LIB} -ldl -lpthread -lstdc++)
-add_dependencies(AntiDuplX make_turbojpeg)
 
+if(ADX_USE_SYSTEM_TURBOJPEG)
+	target_link_libraries(AntiDuplX ${SIMD_LIB} libjpeg-turbo::turbojpeg -ldl -lpthread -lstdc++)
+else()
+	target_link_libraries(AntiDuplX ${SIMD_LIB} ${TURBOJPEG_LIB} -ldl -lpthread -lstdc++)
+	add_dependencies(AntiDuplX make_turbojpeg)
+endif()

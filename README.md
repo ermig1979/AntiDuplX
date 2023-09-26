@@ -5,7 +5,7 @@ AntiDuplX - cross platform command line tool to find and remove similar pictures
 Building of AntiDuplX for Linux
 ===============================
 
-On Ubuntu-2022.04.2 TLS there is following way to build AntiDuplX:
+On Ubuntu 22.04.2 LTS there is following way to build AntiDuplX:
 
 	sudo apt-get update
 	sudo apt-get install git cmake g++ nasm
@@ -19,6 +19,7 @@ There are addition build parameters:
 
 * `ADX_INFO` - Print build information. It is switched on by default.
 * `ADX_GET_VERSION` - Call scipt to get AntiDuplX version. It is switched on by default.
+* `ADX_USE_SYSTEM_TURBOJPEG` - Use system libjpeg-turbo. It is switched off by default.
 
 Building of AntiDuplX for Windows
 =================================
