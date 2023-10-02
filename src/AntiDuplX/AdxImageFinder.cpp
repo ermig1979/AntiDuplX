@@ -41,7 +41,7 @@ namespace Adx
             if (!Find(Path(_options.imageDirectories[d])))
                 return false;
         }
-        return true;
+        return !_imageInfos.empty();
     }
 
     bool ImageFinder::Find(const Path& path)
