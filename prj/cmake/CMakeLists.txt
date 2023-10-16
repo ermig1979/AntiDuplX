@@ -42,5 +42,5 @@ endif()
 
 install(TARGETS AntiDuplX DESTINATION bin)
 
-#add_custom_target("uninstall")
-#add_custom_command(TARGET "uninstall" POST_BUILD COMMENT "Uninstall AntiDuplX..." COMMAND cat install_manifest.txt | sudo xargs rm -v)
+add_custom_target("uninstall")
+add_custom_command(TARGET "uninstall" POST_BUILD COMMENT "Uninstall AntiDuplX..." COMMAND cat install_manifest.txt | sudo xargs rm -v)
