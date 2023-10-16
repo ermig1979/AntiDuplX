@@ -39,3 +39,8 @@ else()
 	target_link_libraries(AntiDuplX ${SIMD_LIB} ${TURBOJPEG_LIB} -ldl -lpthread -lstdc++)
 	add_dependencies(AntiDuplX make_turbojpeg)
 endif()
+
+install(TARGETS AntiDuplX DESTINATION bin)
+
+#add_custom_target("uninstall")
+#add_custom_command(TARGET "uninstall" POST_BUILD COMMENT "Uninstall AntiDuplX..." COMMAND cat install_manifest.txt | sudo xargs rm -v)
