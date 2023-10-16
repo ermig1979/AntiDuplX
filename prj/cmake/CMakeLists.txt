@@ -40,7 +40,7 @@ else()
 	add_dependencies(AntiDuplX make_turbojpeg)
 endif()
 
-install(TARGETS AntiDuplX DESTINATION bin)
+install(TARGETS AntiDuplX DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 add_custom_target("uninstall")
 add_custom_command(TARGET "uninstall" POST_BUILD COMMENT "Uninstall AntiDuplX..." COMMAND cat install_manifest.txt | sudo xargs rm -v)
