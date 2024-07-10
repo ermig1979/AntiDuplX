@@ -6,6 +6,8 @@ option(ADX_GET_VERSION "Get AntiDuplX version" ON)
 option(ADX_USE_SYSTEM_TURBOJPEG "Use system libjpeg-turbo" OFF)
 
 set(ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../..)
+set(BUILD_SHARED_LIBS OFF)
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -static-libgcc -static-libstdc++")
 
 include_directories(${ROOT_DIR}/src)
 
