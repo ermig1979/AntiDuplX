@@ -47,6 +47,7 @@ namespace Adx
         Matcher::HashType compareSize;
         size_t threadNumber;
         String outFile;
+        String delimiter;
         bool deleteDupls;
         bool deleteBads;
 
@@ -72,6 +73,7 @@ namespace Adx
             compareSize = ToHashType(GetArg2("-cs", "--compareSize", "32x32", false));
             threadNumber = std::min<size_t>(std::max<size_t>(Cpl::ToVal<size_t>(GetArg2("-tn", "--threadNumber", "-1", false)), 1), std::thread::hardware_concurrency());
             outFile = GetArg2("-of", "--outFile", "out.txt", false);
+            delimiter = GetArg2("-dl", "--delimiter", "\t");
             deleteDupls = Cpl::ToVal<bool>(GetArg2("-dd", "--deleteDupls", "0"));
             deleteBads = Cpl::ToVal<bool>(GetArg2("-db", "--deleteBads", "0"));
         }
@@ -95,6 +97,8 @@ namespace Adx
             std::cout << "                                                       By default it is equal to 0.05." << std::endl << std::endl;
             std::cout << "  -of=./dupl_list.txt or --outFile=./dupl_list.txt   - a file name to save list with found duplicated and damaged images." << std::endl;
             std::cout << "                                                       A path to image with poor quality is printed at the beginning of line." << std::endl << std::endl;
+            std::cout << "  -dl='\t' or --delimiter='\t'                       - Create separators for fields when outputting files." << std::endl;
+            std::cout << "                                                       By default, \t is used as the delimiter, and the presence of \t in the path may result in serial output." << std::endl << std::endl;
             std::cout << "Also you can use parameters: " << std::endl << std::endl;
             std::cout << "  --help or -h                       - to print this help message." << std::endl << std::endl;
             std::cout << "  --version or -v                    - to print AntiDuplX version." << std::endl << std::endl;
