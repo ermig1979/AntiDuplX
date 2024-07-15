@@ -41,6 +41,7 @@ Where following parameters are used:
 * `-id=./pict_dir_1` or `--imageDirectories=./pict_dir_1` - a path to directory with images. You can set several directories.
 * `-ct=0.05` or `--compareThreshold=0.05` - an image compare threshold. Standard deviation threshold for duplicates. By default it is equal to 0.05.
 * `-of=./dupl_list.txt` or `--outFile=./dupl_list.txt` - a file name to save list with found duplicated and damaged images. A path to image with poor quality is printed at the beginning of line.
+* `-dl='\t'` or `--delimiter='\t'`  - Create separators for fields when outputting files. By default,`\t`is used as a delimiter.
 
 Also you can use parameters:
 * `--help` or `-h` - to print this help message.

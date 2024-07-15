@@ -43,6 +43,8 @@ namespace Adx
 
     bool ResultHandler::SaveOutFile()
     {
+        std::string delimiter = _options.delimiter;
+
         if (_options.outFile.empty())
             return true;
         fs::path path(_options.outFile);
@@ -58,7 +60,6 @@ namespace Adx
                     return false;
                 }
             }
-
         }
         std::ofstream ofs(_options.outFile.c_str());
         if (!ofs.is_open())
@@ -72,8 +73,8 @@ namespace Adx
             const ImageInfo& info = *_imageInfos[i];
             if (info.error)
             {
-                ofs << info.path << "\t";
-                ofs << info.width << "x" << info.height << "\t";
+                ofs << info.path << delimiter;
+                ofs << info.width << "x" << info.height << delimiter;
                 ofs << info.size / 1024 << "kb";
                 ofs << std::endl;
                 if (_options.deleteBads)
@@ -87,12 +88,12 @@ namespace Adx
             }
             if (info.duplicate)
             {
-                ofs << info.path << "\t";
-                ofs << info.width << "x" << info.height << "\t";
-                ofs << info.size / 1024 << "kb\t";
-                ofs << info.difference << "\t";
-                ofs << info.duplicate->path << "\t";
-                ofs << info.duplicate->width << "x" << info.duplicate->height << "\t";
+                ofs << info.path << delimiter;
+                ofs << info.width << "x" << info.height << delimiter;
+                ofs << info.size / 1024 << "kb" << delimiter;
+                ofs << info.difference << delimiter;
+                ofs << info.duplicate->path << delimiter;
+                ofs << info.duplicate->width << "x" << info.duplicate->height << delimiter;
                 ofs << info.duplicate->size / 1024 << "kb";
                 ofs << std::endl;
                 if (_options.deleteDupls)
@@ -110,4 +111,3 @@ namespace Adx
         return true;
     }
 }
-
