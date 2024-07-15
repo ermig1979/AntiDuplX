@@ -65,7 +65,7 @@ namespace Adx
                 exit(0);
             }
             imageDirectories = GetArgs(Strings({ "-id", "--imageDirectories" }), Strings({"."}));
-            imageExtensions = GetArgs(Strings({ "-ie", "--imageExtensions" }), Strings( { ".jpg", ".png"}));
+            imageExtensions = GetArgs(Strings({ "-ie", "--imageExtensions" }), Strings( { ".jpg", ".png", ".jpeg"}));
             subDirectories = Cpl::ToVal<bool>(GetArg2("-sd", "--subDirectory", "1"));
             logLevel = (Cpl::Log::Level)Cpl::ToVal<Int>(GetArg2("-ll", "--logLevel", "3", false));
             performanceReport = Cpl::ToVal<bool>(GetArg2("-pr", "--performanceReport", "0"));
@@ -98,7 +98,7 @@ namespace Adx
             std::cout << "  -of=./dupl_list.txt or --outFile=./dupl_list.txt   - a file name to save list with found duplicated and damaged images." << std::endl;
             std::cout << "                                                       A path to image with poor quality is printed at the beginning of line." << std::endl << std::endl;
             std::cout << "  -dl='\t' or --delimiter='\t'                       - Create separators for fields when outputting files." << std::endl;
-            std::cout << "                                                       By default, \t is used as the delimiter, and the presence of \t in the path may result in serial output." << std::endl << std::endl;
+            std::cout << "                                                       By default,'\t'is used as a delimiter." << std::endl << std::endl;
             std::cout << "Also you can use parameters: " << std::endl << std::endl;
             std::cout << "  --help or -h                       - to print this help message." << std::endl << std::endl;
             std::cout << "  --version or -v                    - to print AntiDuplX version." << std::endl << std::endl;
