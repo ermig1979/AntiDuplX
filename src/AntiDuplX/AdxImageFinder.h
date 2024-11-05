@@ -46,6 +46,7 @@ namespace Adx
         ImageInfos & _imageInfos;
         size_t _begin, _previous;
 
+        Strings ValidDirs() const;
         bool Find(const Path& path);
         bool IsWanted(const Path& path);
         void Push(const DirEntry &entry);

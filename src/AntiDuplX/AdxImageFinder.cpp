@@ -36,12 +36,25 @@ namespace Adx
         CPL_PERF_FUNC();
 
         _begin = 0, _previous = 0;
-        for (size_t d = 0; d < _options.imageDirectories.size(); ++d)
+        Strings validDirs = ValidDirs();
+        for (size_t d = 0; d < validDirs.size(); ++d)
         {
-            if (!Find(Path(_options.imageDirectories[d])))
+            if (!Find(Path(validDirs[d])))
                 return false;
         }
         return !_imageInfos.empty();
+    }
+
+    Strings ImageFinder::ValidDirs() const
+    {
+        Strings sorted = _options.imageDirectories, valid;
+        std::sort(sorted.begin(), sorted.end());
+        for (size_t i = 0; i < sorted.size(); ++i)
+        {
+            if (valid.empty() || sorted[i].find(valid.back(), 0) != 0)
+                valid.push_back(sorted[i]);
+        }
+        return valid;
     }
 
     bool ImageFinder::Find(const Path& path)
